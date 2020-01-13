@@ -1,23 +1,25 @@
-type satysfiType =
-  | SATySFiFunction
-  | SATySFiString
-  | SATySFiBool
-  | SATySFiInt
-  | SATySFiFloat
-  | SATySFiLength
-  | SATySFiInlineText
-  | SATySFiBlockText
+open Range
 
-type attribs = string * satysfiType option * ((string * satysfiType * int) list)
+type satysfiType =
+  | SATySFiFunction of Range.t
+  | SATySFiString of Range.t
+  | SATySFiBool of Range.t
+  | SATySFiInt of Range.t
+  | SATySFiFloat of Range.t
+  | SATySFiLength of Range.t
+  | SATySFiInlineText of Range.t
+  | SATySFiBlockText of Range.t
+
+type attribs = (Range.t * string) * satysfiType option * (((Range.t * string) * satysfiType * (Range.t * int)) list)
 
 type term =
   | TmString of string
-  | TmRequirePackage of string list * term
-  | TmImportPackage of string list * term
-  | TmBlockCmd of string list * term
-  | TmBLockCmdPro of string list * term
-  | TmInlineCmd of string list * term
-  | TmComment of string * term
+  | TmRequirePackage of (Range.t * string) list * term
+  | TmImportPackage of (Range.t * string) list * term
+  | TmBlockCmd of (Range.t * string) list * term
+  | TmBLockCmdPro of (Range.t * string) list * term
+  | TmInlineCmd of (Range.t * string) list * term
+  | TmComment of (Range.t * string) * term
   | TmAttrib of attribs list * term
   | TmNull
   | TmEOF

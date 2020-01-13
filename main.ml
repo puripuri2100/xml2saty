@@ -6,6 +6,7 @@ open Printf
 open Filename
 open Lexing
 
+open Range
 open Types
 open Parse
 open Lex

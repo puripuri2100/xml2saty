@@ -1,26 +1,27 @@
+open Range
 open Types
 
 type state
 
-val set_requirePackage : string list -> unit
+val set_requirePackage : (Range.t * string) list -> unit
 
-val get_requirePackage : unit -> string list
+val get_requirePackage : unit -> (Range.t * string) list
 
-val set_importPackage : string list -> unit
+val set_importPackage : (Range.t * string) list -> unit
 
-val get_importPackage : unit -> string list
+val get_importPackage : unit -> (Range.t * string) list
 
-val set_blockCmd : string list -> unit
+val set_blockCmd : (Range.t * string) list -> unit
 
-val get_blockCmd : unit -> string list
+val get_blockCmd : unit -> (Range.t * string) list
 
-val set_blockCmdPro : string list -> unit
+val set_blockCmdPro : (Range.t * string) list -> unit
 
-val get_blockCmdPro : unit -> string list
+val get_blockCmdPro : unit -> (Range.t * string) list
 
-val set_inlineCmd :string list -> unit
+val set_inlineCmd :(Range.t * string) list -> unit
 
-val get_inlineCmd : unit -> string list
+val get_inlineCmd : unit -> (Range.t * string) list
 
 val set_attrib : Types.attribs list -> unit
 

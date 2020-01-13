@@ -1,18 +1,35 @@
 %{
+  open Range
   open Types
 %}
 
-%token SATySFiFunction SATySFiString SATySFiBool SATySFiInt SATySFiFloat SATySFiLength SATySFiInlineText SATySFiBlockText
-%token LPAREN RPAREN
-%token LBRAC RBRAC
-%token Colon SemiColon Comma
-%token Attrib
-%token LComment RComment
-%token DoubleQuotation
-%token <string>String
-%token <int>Int
-%token <string>Path
-%token Require Import BlockCmd BlockCmdPro InlineCmd
+%token <Range.t>SATySFiFunction
+%token <Range.t>SATySFiString
+%token <Range.t>SATySFiBool
+%token <Range.t>SATySFiInt
+%token <Range.t>SATySFiFloat
+%token <Range.t>SATySFiLength
+%token <Range.t>SATySFiInlineText
+%token <Range.t>SATySFiBlockText
+%token <Range.t>LPAREN
+%token <Range.t>RPAREN
+%token <Range.t>LBRAC
+%token <Range.t>RBRAC
+%token <Range.t>Colon
+%token <Range.t>SemiColon
+%token <Range.t>Comma
+%token <Range.t>Attrib
+%token <Range.t>LComment
+%token <Range.t>RComment
+%token <Range.t>DoubleQuotation
+%token <Range.t * string>String
+%token <Range.t * int>Int
+%token <Range.t * string>Path
+%token <Range.t>Require
+%token <Range.t>Import
+%token <Range.t>BlockCmd
+%token <Range.t>BlockCmdPro
+%token <Range.t>InlineCmd
 %token EOF
 
 %start parse
@@ -24,14 +41,14 @@ parse :
   | term EOF { $1 }
 ;
 satysfiType :
-  | SATySFiFunction {SATySFiFunction}
-  | SATySFiString {SATySFiString}
-  | SATySFiBool {SATySFiBool}
-  | SATySFiInt {SATySFiInt}
-  | SATySFiFloat {SATySFiFloat}
-  | SATySFiLength {SATySFiLength}
-  | SATySFiInlineText {SATySFiInlineText}
-  | SATySFiBlockText {SATySFiBlockText}
+  | SATySFiFunction {SATySFiFunction($1)}
+  | SATySFiString {SATySFiString($1)}
+  | SATySFiBool {SATySFiBool($1)}
+  | SATySFiInt {SATySFiInt($1)}
+  | SATySFiFloat {SATySFiFloat($1)}
+  | SATySFiLength {SATySFiLength($1)}
+  | SATySFiInlineText {SATySFiInlineText($1)}
+  | SATySFiBlockText {SATySFiBlockText($1)}
 ;
 str_lstcont:
   | { [] }

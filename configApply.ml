@@ -5,7 +5,7 @@ open SatysfiSyntax
 
 let add_paren str = "(" ^ str ^ ")"
 
-
+(*
 let tag tag_name opt_lst children =
   let blockCmd_lst = ConfigState.get_blockCmd () in
   let if_blockCmd = List.exists ((=) tag_name) blockCmd_lst in
@@ -23,15 +23,16 @@ let tag tag_name opt_lst children =
           "\\" ^ tag_name ^ opt_lst ^ children ^ ";"
         else
           tag_name ^ opt_lst ^ children |> String.uncapitalize_ascii
-
+*)
 
 let to_cmd btag tag_name =
+  let eq (_, name) = (tag_name = name) in
   let blockCmd_lst = ConfigState.get_blockCmd () in
-  let is_blockCmd = List.exists ((=) btag) blockCmd_lst in
+  let is_blockCmd = List.exists eq blockCmd_lst in
   let blockCmdPro_lst = ConfigState.get_blockCmdPro () in
-  let is_blockCmdPro = List.exists ((=) btag) blockCmdPro_lst in
+  let is_blockCmdPro = List.exists eq blockCmdPro_lst in
   let inlineCmd_lst = ConfigState.get_inlineCmd () in
-  let is_inlineCmd = List.exists ((=) btag) inlineCmd_lst in
+  let is_inlineCmd = List.exists eq inlineCmd_lst in
     if is_blockCmd then
       "+" ^ tag_name
     else
@@ -47,14 +48,14 @@ let to_cmd btag tag_name =
 let requirePackage () =
   let join s1 s2 = s1 ^ "\n" ^ s2 in
     ConfigState.get_requirePackage ()
-    |> List.map (fun p -> "@require: " ^ p)
+    |> List.map (fun (pos, p) -> "@require: " ^ p)
     |> List.fold_left join ""
 
 
 let importPackage () =
   let join s1 s2 = s1 ^ "\n" ^ s2 in
     ConfigState.get_importPackage ()
-    |> List.map (fun p -> "@import: " ^ p)
+    |> List.map (fun (pos, p) -> "@import: " ^ p)
     |> List.fold_left join ""
 
 
@@ -83,15 +84,15 @@ let set_attrib tag (attrib, var) =
   let attribs_lst = ConfigState.get_attrib () in
   let attrib_lst =
     try
-      List.find (fun (tag_name, _, _) -> tag_name = tag) attribs_lst
+      List.find (fun ((_, tag_name), _, _) -> tag_name = tag) attribs_lst
         |> (fun (_, _, lst) -> lst)
     with
     | Not_found -> []
   in
   let v =
     try
-      List.find (fun (attrib_name, _, _) -> attrib_name = attrib) attrib_lst
-        |> (fun (_, satysfi_type, n) -> Some(SatysfiSyntax.from_type satysfi_type var, n))
+      List.find (fun ((_, attrib_name), _, _) -> attrib_name = attrib) attrib_lst
+        |> (fun (_, satysfi_type, (_, n)) -> Some(SatysfiSyntax.from_type satysfi_type var, n))
     with
     | Not_found -> None
   in
@@ -99,12 +100,13 @@ let set_attrib tag (attrib, var) =
 
 
 let type_paren tag_name str =
+  let eq (_, name) = (tag_name = name) in
   let blockCmd_lst = ConfigState.get_blockCmd () in
-  let is_blockCmd = List.exists ((=) tag_name) blockCmd_lst in
+  let is_blockCmd = List.exists eq blockCmd_lst in
   let blockCmdPro_lst = ConfigState.get_blockCmdPro () in
-  let is_blockCmdPro = List.exists ((=) tag_name) blockCmdPro_lst in
+  let is_blockCmdPro = List.exists eq blockCmdPro_lst in
   let inlineCmd_lst = ConfigState.get_inlineCmd () in
-  let is_inlineCmd = List.exists ((=) tag_name) inlineCmd_lst in
+  let is_inlineCmd = List.exists eq inlineCmd_lst in
     if is_blockCmd then
       SatysfiSyntax.from_block_text str |> add_paren
     else
@@ -118,12 +120,13 @@ let type_paren tag_name str =
 
 
 let type_semicolon tag_name =
+  let eq (_, name) = (tag_name = name) in
   let blockCmd_lst = ConfigState.get_blockCmd () in
-  let is_blockCmd = List.exists ((=) tag_name) blockCmd_lst in
+  let is_blockCmd = List.exists eq blockCmd_lst in
   let blockCmdPro_lst = ConfigState.get_blockCmdPro () in
-  let is_blockCmdPro = List.exists ((=) tag_name) blockCmdPro_lst in
+  let is_blockCmdPro = List.exists eq blockCmdPro_lst in
   let inlineCmd_lst = ConfigState.get_inlineCmd () in
-  let is_inlineCmd = List.exists ((=) tag_name) inlineCmd_lst in
+  let is_inlineCmd = List.exists eq inlineCmd_lst in
     if is_blockCmd then
       ";"
     else

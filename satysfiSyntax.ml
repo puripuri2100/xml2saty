@@ -1,3 +1,4 @@
+open Range
 open String
 open Types
 
@@ -73,12 +74,12 @@ let from_color  color =
 let from_type satysfi_type str =
   let f =
   match satysfi_type with
-    | SATySFiString -> from_string
-    | SATySFiBool -> to_bool
-    | SATySFiInt -> to_int
-    | SATySFiFloat -> to_float
-    | SATySFiInlineText -> from_inline_text
-    | SATySFiBlockText -> from_block_text
+    | SATySFiString(_) -> from_string
+    | SATySFiBool(_) -> to_bool
+    | SATySFiInt(_) -> to_int
+    | SATySFiFloat(_) -> to_float
+    | SATySFiInlineText(_) -> from_inline_text
+    | SATySFiBlockText(_) -> from_block_text
     | _ -> from_string
   in
     f str

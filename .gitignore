@@ -7,3 +7,5 @@ t
 *.xml
 *.x2s-config
 xml2saty
+
+*.opam

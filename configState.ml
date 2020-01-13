@@ -1,11 +1,12 @@
+open Range
 open Types
 
 type state = {
-  mutable requirePackage : string list;
-  mutable importPackage : string list;
-  mutable blockCmd : string list;
-  mutable blockCmdPro : string list;
-  mutable inlineCmd : string list;
+  mutable requirePackage : (Range.t * string) list;
+  mutable importPackage : (Range.t * string) list;
+  mutable blockCmd : (Range.t * string) list;
+  mutable blockCmdPro : (Range.t * string) list;
+  mutable inlineCmd : (Range.t * string) list;
   mutable attrib : Types.attribs list;
 }
 
