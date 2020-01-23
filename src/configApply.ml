@@ -26,7 +26,7 @@ let tag tag_name opt_lst children =
 *)
 
 let to_cmd btag tag_name =
-  let eq (_, name) = (tag_name = name) in
+  let eq (_, name) = (btag = name) in
   let blockCmd_lst = ConfigState.get_blockCmd () in
   let is_blockCmd = List.exists eq blockCmd_lst in
   let blockCmdPro_lst = ConfigState.get_blockCmdPro () in
@@ -59,7 +59,7 @@ let importPackage () =
     |> List.fold_left join ""
 
 
-let pcdata btag str =
+let pcdata tag str =
 (*
   let attrib_lst = ConfigState.get_attrib () in
   let tag_lst_pcdata_type_opt =

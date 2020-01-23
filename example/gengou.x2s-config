@@ -1,0 +1,41 @@
+require:[stdja]
+
+import:[local]
+
+inline-cmd :
+  [
+    LawNum;
+    LawTitle;
+    ParagraphNum;
+    ParagraphSentence;
+    Sentence;
+    SupplProvisionLabel;
+  ]
+
+block-cmd : [
+  ]
+block-cmd-pro : [
+    Law;
+    LawBody;
+    MainProvision;
+    Paragraph;
+    SupplProvision;
+  ]
+
+attrib :
+  [
+    LawNum(inline-text)[];
+    ParagraphNum (inline-text)[];
+    Paragraph [
+      (Hide, bool, 1);
+      (Num, int, 2)
+    ];
+    ParagraphNum(int)[];
+    Sentence (inline-text) [
+      (WritingMode, string, 1)
+    ];
+    SupplProvision[
+      (Extract, bool, 1);
+      (Type, string, 2)
+    ];
+  ]

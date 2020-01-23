@@ -3,34 +3,26 @@ TARGET=xml2saty
 BINDIR=$(PREFIX)/bin
 
 
-.PHONY: build install uninstall clean
+.PHONY: build install uninstall clean example
 
-build: main.ml error.ml error.mli optionState.ml optionState.mli satysfiSyntax.ml satysfiSyntax.mli types.ml configState.ml configState.mli configApply.ml configApply.mli range.ml
+build: src
 	-mkdir _build
-	cp lex.mll _build
-	cp parse.mly _build
-	cp main.ml error.ml error.mli optionState.ml optionState.mli satysfiSyntax.ml satysfiSyntax.mli types.ml configState.ml configState.mli configApply.ml configApply.mli range.ml _build
+	cp src/lex.mll _build
+	cp src/parse.mly _build
+	cp src/*.ml src/*.mli _build
 	cd _build && ocamllex lex.mll
 	cd _build && menhir parse.mly
-	cd _build && ocamlfind ocamlopt -o xml2saty -linkpkg -package xml-light,str range.ml types.ml parse.mli parse.ml lex.ml error.mli error.ml optionState.mli optionState.ml satysfiSyntax.mli satysfiSyntax.ml configState.mli configState.ml configApply.mli configApply.ml main.ml
+	cd _build && ocamlfind ocamlopt -o xml2saty -linkpkg -package xml-light range.ml types.ml parse.mli parse.ml lex.ml error.mli error.ml optionState.mli optionState.ml satysfiSyntax.mli satysfiSyntax.ml configState.mli configState.ml configApply.mli configApply.ml main.ml
 	cp _build/xml2saty ./
 
-install:
-	mkdir -p $(BINDIR)
-	install $(TARGET) $(BINDIR)
 
-uninstall:
-	rm -rf $(BINDIR)/$(TARGET)
-
-
-test: main.ml error.ml error.mli optionState.ml optionState.mli satysfiSyntax.ml satysfiSyntax.mli types.ml configState.ml configState.mli configApply.ml configApply.mli xml2saty
+test: src xml2saty
 	./xml2saty -o test.saty -c test.x2s-config -t "<a> <b>1A</b> <c>3A<b>2A<c>3B</c></b></c> </a>"
 	./xml2saty test2.xml -c test.x2s-config
 	./xml2saty t/test3.xml -o t/test3.saty -c test.x2s-config
 
-law: main.ml error.ml error.mli optionState.ml optionState.mli satysfiSyntax.ml satysfiSyntax.mli types.ml configState.ml configState.mli configApply.ml configApply.mli xml2saty
-	./xml2saty -o t/gengou.saty -f t/354AC0000000043_20150801_000000000000000.xml -c test.x2s-config
-	./xml2saty -o t/keihou.saty -f t/140AC0000000045_20170713_429AC0000000072.xml -c test.x2s-config
+example: src example/gengou.x2s-config
+	./xml2saty -f example/gengou.xml -o example/gengou.saty -c example/gengou.x2s-config
 
 
 clean:

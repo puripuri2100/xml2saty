@@ -1,7 +1,6 @@
 open Xml
 open Arg
 open String
-open Str
 open Printf
 open Filename
 open Lexing
@@ -63,23 +62,10 @@ let xml2string config xml =
         List.fold_right join_str (List.map (sub tag) children) ""
       in
         "\n" ^ tag_name
-          ^ attrib ^ "\n"
+          ^ attrib
           ^ ConfigApply.type_paren tag children_str
           ^ ConfigApply.type_semicolon btag
-(*
-      let join s1 s2 = s1 ^ "\n" ^ s2 in
-      let f1 lst =
-        let f (attrib, var) =
-          add_paren var
-        in
-        List.map f lst |> List.fold_left join ""
-      in
-      let f2 lst =
-        List.map (sub tag) lst |> List.fold_left join ""
-      in
-        ConfigApply.tag tag (f1 opt_lst) (add_paren (f2 children))
-*)
-    | PCData(str) -> ConfigApply.pcdata btag str
+    | PCData(str) -> ConfigApply.pcdata tag str
   in
   match xml with
     | Element(tag, attrib_lst, children) ->

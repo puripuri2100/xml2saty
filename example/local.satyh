@@ -1,0 +1,23 @@
+@require: stdja
+
+let law body = StdJa.document (|title = {元号法}; author = {}; show-title = true; show-toc = false|) body
+
+let-block ctx +LawNum it = read-inline ctx {LawNum : #it;} |> line-break true true ctx
+
+let-block ctx +LawBody bt = read-block ctx bt
+
+let-block ctx +LawTitle it = read-inline ctx {LawTitle : #it;} |> line-break true true ctx
+
+let-block ctx +MainProvision bt = read-block ctx bt
+
+let-block ctx +Paragraph b n bt = read-block ctx bt
+
+let-block ctx +ParagraphNum it = read-inline ctx {ParagraphNum : #it;} |> line-break true true ctx
+
+let-block ctx +ParagraphSentence it = read-inline ctx {ParagraphSentence : #it;} |> line-break true true ctx
+
+let-inline ctx \Sentence str it = read-inline ctx it
+
+let-block ctx +SupplProvision b str bt = read-block ctx bt
+
+let-block ctx +SupplProvisionLabel it = read-inline ctx {SupplProvisionLabel : #it;} |> line-break true true ctx

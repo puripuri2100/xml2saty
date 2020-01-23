@@ -1,11 +1,12 @@
 _build
 t
-*.saty
-*.satyh
-*.satysfi-aux
-*.pdf
-*.xml
-*.x2s-config
 xml2saty
 
+*.saty
+*.pdf
+*.satysfi-aux
+
 *.opam
+
+
+keihou.*
