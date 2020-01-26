@@ -27,4 +27,4 @@ example: src example/law.x2s-config
 
 
 clean:
-	@rm -rf *.cmi *.cmx *.cmo *.o *.out _build xml2saty
+	@rm -rf *.cmi *.cmx *.cmo *.o *.out _build xml2saty example/*.pdf example/*.satysfi-aux example/*.saty
