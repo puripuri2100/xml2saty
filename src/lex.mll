@@ -14,10 +14,8 @@
 let space = [' ' '\t' '\n' '\r']
 let digit = ['0'-'9']
 let alpha = ( ['a'-'z'] | ['A'-'Z'] )
-let symbol = ( [' '-'@'] | ['['-'`'] | ['{'-'~'] )
-let opsymbol = ( '+' | '-' | '*' | '/' | '^' | '&' | '|' | '!' | ':' | '=' | '<' | '>' | '~' | '\'' | '.' | '?' )
 let alnum = digit | alpha
-let string = ( alnum | '.' | '/' | '-' )
+let string = [^ ' ' '\t' '\n' '\r' '(' ')' '[' ']' ',' ';' ':' '*' '"']
 
 rule lex = parse
   | space+   { lex lexbuf }
@@ -52,6 +50,14 @@ rule lex = parse
   | "block-text" {
       let pos = get_pos lexbuf in
       SATySFiBlockText(pos)
+    }
+  | "(*" {
+      let pos = get_pos lexbuf in
+      LComment(pos)
+    }
+  | "*)" {
+      let pos = get_pos lexbuf in
+      RComment(pos)
     }
   | "\"" {
       let pos = get_pos lexbuf in
@@ -96,14 +102,6 @@ rule lex = parse
   | "attrib" {
       let pos = get_pos lexbuf in
       Attrib(pos)
-    }
-  | "(*" {
-      let pos = get_pos lexbuf in
-      LComment(pos)
-    }
-  | "*)" {
-      let pos = get_pos lexbuf in
-      RComment(pos)
     }
   | digit+ as n {
       let pos = get_pos lexbuf in

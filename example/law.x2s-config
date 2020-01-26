@@ -2,6 +2,7 @@ require:[stdja]
 
 import:[local]
 
+(*comment*)
 attrib :
   [
     Ruby(inline-text)[];
