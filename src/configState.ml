@@ -4,9 +4,6 @@ open Types
 type state = {
   mutable requirePackage : (Range.t * string) list;
   mutable importPackage : (Range.t * string) list;
-  mutable blockCmd : (Range.t * string) list;
-  mutable blockCmdPro : (Range.t * string) list;
-  mutable inlineCmd : (Range.t * string) list;
   mutable attrib : Types.attribs list;
 }
 
@@ -14,9 +11,6 @@ type state = {
 let state = {
   requirePackage = [];
   importPackage = [];
-  blockCmd = [];
-  blockCmdPro = [];
-  inlineCmd = [];
   attrib = [];
 }
 
@@ -32,27 +26,6 @@ let set_importPackage lst =
 
 let get_importPackage () =
   state.importPackage
-
-
-let set_blockCmd lst =
-  state.blockCmd <- lst
-
-let get_blockCmd () =
-  state.blockCmd
-
-
-let set_blockCmdPro lst =
-  state.blockCmdPro <- lst
-
-let get_blockCmdPro () =
-  state.blockCmdPro
-
-
-let set_inlineCmd lst =
-  state.inlineCmd <- lst
-
-let get_inlineCmd () =
-  state.inlineCmd
 
 
 let set_attrib lst =
@@ -71,15 +44,6 @@ let set_all (term: Types.term) =
         sub term'
     | TmImportPackage(lst, term') ->
       let () = set_importPackage lst in
-        sub term'
-    | TmBlockCmd(lst, term') ->
-      let () = set_blockCmd lst in
-        sub term'
-    | TmBLockCmdPro(lst, term') ->
-      let () = set_blockCmdPro lst in
-        sub term'
-    | TmInlineCmd(lst, term') ->
-      let () = set_inlineCmd lst in
         sub term'
     | TmAttrib(lst, term') ->
     let () = set_attrib lst in

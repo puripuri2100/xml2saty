@@ -26,23 +26,21 @@ let tag tag_name opt_lst children =
 *)
 
 let to_cmd btag tag_name =
-  let eq (_, name) = (btag = name) in
-  let blockCmd_lst = ConfigState.get_blockCmd () in
-  let is_blockCmd = List.exists eq blockCmd_lst in
-  let blockCmdPro_lst = ConfigState.get_blockCmdPro () in
-  let is_blockCmdPro = List.exists eq blockCmdPro_lst in
-  let inlineCmd_lst = ConfigState.get_inlineCmd () in
-  let is_inlineCmd = List.exists eq inlineCmd_lst in
-    if is_blockCmd then
-      "+" ^ tag_name
-    else
-      if is_blockCmdPro then
-        "+" ^ tag_name
-      else
-        if is_inlineCmd then
-          "\\" ^ tag_name
-        else
-          String.uncapitalize_ascii tag_name
+  let get_opt o =
+    match o with
+    | Some(v) -> v
+    | None -> SATySFiFunction(Range.dummy "ConfigApply:to_cmd")
+  in
+  let eq ((_,name),_,_) = (btag = name) in
+  let attrib_lst = ConfigState.get_attrib () in
+  let satysfi_type =
+    try List.find eq attrib_lst |> (fun (_, t, _) -> t) |> get_opt
+    with _ -> SATySFiFunction(Range.dummy "ConfigApply:to_cmd")
+  in
+  match satysfi_type with
+  | SATySFiBlockText(_) -> "+" ^ tag_name
+  | SATySFiInlineText(_) -> "\\" ^ tag_name
+  | _ -> String.uncapitalize_ascii tag_name
 
 
 let requirePackage () =
@@ -100,40 +98,33 @@ let set_attrib tag (attrib, var) =
 
 
 let type_paren tag_name str =
-  let eq (_, name) = (tag_name = name) in
-  let blockCmd_lst = ConfigState.get_blockCmd () in
-  let is_blockCmd = List.exists eq blockCmd_lst in
-  let blockCmdPro_lst = ConfigState.get_blockCmdPro () in
-  let is_blockCmdPro = List.exists eq blockCmdPro_lst in
-  let inlineCmd_lst = ConfigState.get_inlineCmd () in
-  let is_inlineCmd = List.exists eq inlineCmd_lst in
-    if is_blockCmd then
-      SatysfiSyntax.from_block_text str |> add_paren
-    else
-      if is_blockCmdPro then
-        SatysfiSyntax.from_block_text_pro str |> add_paren
-      else
-        if is_inlineCmd then
-          SatysfiSyntax.from_inline_text str |> add_paren
-        else
-          add_paren str
+  let get_opt o =
+    match o with
+    | Some(v) -> v
+    | None -> SATySFiFunction(Range.dummy "ConfigApply:type_paren")
+  in
+  let eq ((_,name),_,_) = (tag_name = name) in
+  let attrib_lst = ConfigState.get_attrib () in
+  let satysfi_type =
+    try List.find eq attrib_lst |> (fun (_, t, _) -> t) |> get_opt
+    with _ -> SATySFiFunction(Range.dummy "ConfigApply:type_paren")
+  in
+  SatysfiSyntax.from_type satysfi_type str |> add_paren
 
 
 let type_semicolon tag_name =
-  let eq (_, name) = (tag_name = name) in
-  let blockCmd_lst = ConfigState.get_blockCmd () in
-  let is_blockCmd = List.exists eq blockCmd_lst in
-  let blockCmdPro_lst = ConfigState.get_blockCmdPro () in
-  let is_blockCmdPro = List.exists eq blockCmdPro_lst in
-  let inlineCmd_lst = ConfigState.get_inlineCmd () in
-  let is_inlineCmd = List.exists eq inlineCmd_lst in
-    if is_blockCmd then
-      ";"
-    else
-      if is_blockCmdPro then
-       ";"
-      else
-        if is_inlineCmd then
-          ";"
-        else
-          ""
+  let get_opt o =
+    match o with
+    | Some(v) -> v
+    | None -> SATySFiFunction(Range.dummy "ConfigApply:type_semicolon")
+  in
+  let eq ((_,name),_,_) = (tag_name = name) in
+  let attrib_lst = ConfigState.get_attrib () in
+  let satysfi_type =
+    try List.find eq attrib_lst |> (fun (_, t, _) -> t) |> get_opt
+    with _ -> SATySFiFunction(Range.dummy "ConfigApply:type_semicolon")
+  in
+  match satysfi_type with
+  | SATySFiBlockText(_) -> ";"
+  | SATySFiInlineText(_) -> ";"
+  | _ -> ""

@@ -21,8 +21,9 @@ test: src xml2saty
 	./xml2saty test2.xml -c test.x2s-config
 	./xml2saty t/test3.xml -o t/test3.saty -c test.x2s-config
 
-example: src example/gengou.x2s-config
-	./xml2saty -f example/gengou.xml -o example/gengou.saty -c example/gengou.x2s-config
+example: src example/law.x2s-config
+	./xml2saty -f example/gengou.xml -o example/gengou.saty -c example/law.x2s-config
+	./xml2saty -f example/keihou.xml -o example/keihou.saty -c example/law.x2s-config
 
 
 clean:

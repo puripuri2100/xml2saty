@@ -93,18 +93,6 @@ rule lex = parse
       let pos = get_pos lexbuf in
       Import(pos)
     }
-  | "block-cmd" {
-      let pos = get_pos lexbuf in
-      BlockCmd(pos)
-    }
-  | "block-cmd-pro" {
-      let pos = get_pos lexbuf in
-      BlockCmdPro(pos)
-    }
-  | "inline-cmd" {
-      let pos = get_pos lexbuf in
-      InlineCmd(pos)
-    }
   | "attrib" {
       let pos = get_pos lexbuf in
       Attrib(pos)

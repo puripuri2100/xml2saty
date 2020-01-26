@@ -16,9 +16,6 @@ type term =
   | TmString of string
   | TmRequirePackage of (Range.t * string) list * term
   | TmImportPackage of (Range.t * string) list * term
-  | TmBlockCmd of (Range.t * string) list * term
-  | TmBLockCmdPro of (Range.t * string) list * term
-  | TmInlineCmd of (Range.t * string) list * term
   | TmComment of (Range.t * string) * term
   | TmAttrib of attribs list * term
   | TmNull

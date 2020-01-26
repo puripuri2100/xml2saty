@@ -65,7 +65,7 @@ let xml2string config xml =
           ^ attrib
           ^ ConfigApply.type_paren tag children_str
           ^ ConfigApply.type_semicolon btag
-    | PCData(str) -> ConfigApply.pcdata tag str
+    | PCData(str) -> ConfigApply.pcdata btag str
   in
   match xml with
     | Element(tag, attrib_lst, children) ->
@@ -83,7 +83,7 @@ let xml2string config xml =
           List.fold_right join_str (List.map (sub tag) children) ""
         in
           "\n" ^ fun_name
-            ^ attrib ^ "\n"
+            ^ attrib
             ^ ConfigApply.type_paren tag children_str
     | PCData(str) -> SatysfiSyntax.from_string str
 

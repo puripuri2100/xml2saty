@@ -1,0 +1,72 @@
+require:[stdja]
+
+import:[local]
+
+attrib :
+  [
+    Ruby(inline-text)[];
+    Rt(inline-text)[];
+    Law (block-text)[
+      (Era, string, 1);
+      (Lang, string, 2);
+      (LawType, string, 3);
+      (Num, int, 4);
+      (Year, int, 5);
+    ];
+    LawTitle(inline-text)[];
+    LawNum(inline-text)[];
+    LawBody(block-text)[];
+    EnactStatement(inline-text)[];
+    TOC(block-text)[];
+    TOCLabel(inline-text)[];
+    TOCPart(block-text)[
+      (Delete, bool, 1);
+      (Num, int, 2);
+    ];
+    PartTitle(inline-text)[];
+    TOCChapter(block-text)[
+      (Delete, bool, 1);
+      (Num, int, 2);
+    ];
+    ChapterTitle(inline-text)[];
+    ArticleRange(inline-text)[];
+
+    MainProvision(block-text)[];
+    Part(block-text)[
+      (Delete, bool, 1);
+      (Hide, bool, 3);
+      (Num, int, 2);
+    ];
+    Chapter(block-text)[
+      (Delete, bool, 1);
+      (Hide, bool, 3);
+      (Num, int, 2);
+    ];
+    Article(block-text)[
+      (Delete, bool, 1);
+      (Hide, bool, 3);
+      (Num, int, 2);
+    ];
+    ArticleTitle(inline-text)[];
+    ArticleCaption(inline-text)[];
+    Paragraph (block-text)[
+      (Hide, bool, 2);
+      (Num, int, 1)
+    ];
+    ParagraphNum(inline-text)[];
+    ParagraphCaption(inline-text)[];
+    ParagraphSentence(inline-text)[];
+    Sentence (inline-text) [
+      (WritingMode, string, 1);
+    ];
+    SupplProvision(block-text)[];
+    SupplProvisionLabel(inline-text)[];
+    Item(block-text)[
+      (Delete, bool, 1);
+      (Hide, bool, 3);
+      (Num, int, 2);
+    ];
+    ItemTitle(inline-text)[];
+    ItemSentence(block-text)[];
+    Column(block-text)[];
+  ]

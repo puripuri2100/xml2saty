@@ -18,7 +18,6 @@
 %token <Range.t>Colon
 %token <Range.t>SemiColon
 %token <Range.t>Comma
-%token <Range.t>Attrib
 %token <Range.t>LComment
 %token <Range.t>RComment
 %token <Range.t>DoubleQuotation
@@ -27,9 +26,7 @@
 %token <Range.t * string>Path
 %token <Range.t>Require
 %token <Range.t>Import
-%token <Range.t>BlockCmd
-%token <Range.t>BlockCmdPro
-%token <Range.t>InlineCmd
+%token <Range.t>Attrib
 %token EOF
 
 %start parse
@@ -84,9 +81,6 @@ attribs_lst:
 term :
   | Require Colon str_lst term { TmRequirePackage($3, $4)  }
   | Import Colon str_lst term { TmImportPackage($3, $4)  }
-  | BlockCmd Colon str_lst term { TmBlockCmd($3, $4)  }
-  | BlockCmdPro Colon str_lst term { TmBLockCmdPro($3, $4)  }
-  | InlineCmd Colon str_lst term { TmInlineCmd($3, $4)  }
   | Attrib Colon attribs_lst term {TmAttrib($3, $4)}
   | LComment String RComment term { TmComment($2, $4) }
   | LPAREN term RPAREN {$2}

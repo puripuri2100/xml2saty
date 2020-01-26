@@ -79,7 +79,8 @@ let from_type satysfi_type str =
     | SATySFiInt(_) -> to_int
     | SATySFiFloat(_) -> to_float
     | SATySFiInlineText(_) -> from_inline_text
-    | SATySFiBlockText(_) -> from_block_text
+    | SATySFiBlockText(_) -> from_block_text_pro
+    | SATySFiFunction(_) -> (fun str -> str)
     | _ -> from_string
   in
     f str
