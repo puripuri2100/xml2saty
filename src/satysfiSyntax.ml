@@ -56,22 +56,22 @@ let from_string  str =
     back_quote ^ " " ^ str ^ " " ^ back_quote
 
 let from_int  n =
-  string_of_int n
+  n
 
 let to_int s =
-  int_of_string s |> from_int
+  s
 
 let from_float  fl =
-  string_of_float fl
+  fl
 
 let to_float s =
-  float_of_string s |> from_float
+  s
 
 let from_bool b =
-  string_of_bool b
+  b
 
 let to_bool s =
-  bool_of_string s |> from_bool
+  s
 
 (*
 let from_length  len =

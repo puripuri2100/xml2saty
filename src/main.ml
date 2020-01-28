@@ -60,7 +60,7 @@ let xml2string config xml =
       let tag_name = ConfigApply.to_cmd btag tag in
       let children_str =
         if ConfigApply.is_list tag then
-          SatysfiSyntax.to_satysfi_list (List.map (fun s -> s |> sub tag |> ConfigApply.type_paren_list btag) children)
+          SatysfiSyntax.to_satysfi_list (List.map (fun s -> s |> sub tag |> ConfigApply.type_paren_list tag) children)
         else
           List.fold_right join_str (List.map (sub tag) children) ""
       in
