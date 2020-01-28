@@ -9,6 +9,8 @@ type satysfiType =
   | SATySFiLength of Range.t
   | SATySFiInlineText of Range.t
   | SATySFiBlockText of Range.t
+  | SATySFiList of satysfiType
+
 
 type attribs = (Range.t * string) * satysfiType option * (((Range.t * string) * satysfiType * (Range.t * int)) list)
 

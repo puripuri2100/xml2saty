@@ -25,6 +25,11 @@ let tag tag_name opt_lst children =
           tag_name ^ opt_lst ^ children |> String.uncapitalize_ascii
 *)
 
+let get_satysfi_type t =
+  match t with
+  | SATySFiList(t') -> t'
+  | _ -> t
+
 let to_cmd btag tag_name =
   let get_opt o =
     match o with
@@ -37,7 +42,7 @@ let to_cmd btag tag_name =
     try List.find eq attrib_lst |> (fun (_, t, _) -> t) |> get_opt
     with _ -> SATySFiFunction(Range.dummy "ConfigApply:to_cmd")
   in
-  match satysfi_type with
+  match get_satysfi_type satysfi_type with
   | SATySFiBlockText(_) -> "+" ^ tag_name
   | SATySFiInlineText(_) -> "\\" ^ tag_name
   | _ -> String.uncapitalize_ascii tag_name
@@ -112,6 +117,21 @@ let type_paren tag_name str =
   SatysfiSyntax.from_type satysfi_type str |> add_paren
 
 
+let type_paren_list tag_name str =
+  let get_opt o =
+    match o with
+    | Some(v) -> v
+    | None -> SATySFiFunction(Range.dummy "ConfigApply:type_paren")
+  in
+  let eq ((_,name),_,_) = (tag_name = name) in
+  let attrib_lst = ConfigState.get_attrib () in
+  let satysfi_type =
+    try List.find eq attrib_lst |> (fun (_, t, _) -> t) |> get_opt
+    with _ -> SATySFiFunction(Range.dummy "ConfigApply:type_paren")
+  in
+  SatysfiSyntax.from_type (get_satysfi_type satysfi_type) str |> add_paren
+
+
 let type_semicolon tag_name =
   let get_opt o =
     match o with
@@ -128,3 +148,20 @@ let type_semicolon tag_name =
   | SATySFiBlockText(_) -> ";"
   | SATySFiInlineText(_) -> ";"
   | _ -> ""
+
+
+let is_list tag_name =
+  let get_opt o =
+    match o with
+    | Some(v) -> v
+    | None -> SATySFiFunction(Range.dummy "ConfigApply:type_semicolon")
+  in
+  let eq ((_,name),_,_) = (tag_name = name) in
+  let attrib_lst = ConfigState.get_attrib () in
+  let satysfi_type =
+    try List.find eq attrib_lst |> (fun (_, t, _) -> t) |> get_opt
+    with _ -> SATySFiFunction(Range.dummy "ConfigApply:type_semicolon")
+  in
+  match satysfi_type with
+  | SATySFiList(_) -> true
+  | _ -> false

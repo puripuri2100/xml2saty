@@ -12,6 +12,7 @@
 %token <Range.t>SATySFiLength
 %token <Range.t>SATySFiInlineText
 %token <Range.t>SATySFiBlockText
+%token <Range.t> SATySFiList
 %token <Range.t>LPAREN
 %token <Range.t>RPAREN
 %token <Range.t>LBRAC
@@ -37,7 +38,7 @@
 parse :
   | term EOF { $1 }
 ;
-satysfiType :
+satysfiType_cont :
   | SATySFiFunction {SATySFiFunction($1)}
   | SATySFiString {SATySFiString($1)}
   | SATySFiBool {SATySFiBool($1)}
@@ -47,6 +48,9 @@ satysfiType :
   | SATySFiInlineText {SATySFiInlineText($1)}
   | SATySFiBlockText {SATySFiBlockText($1)}
 ;
+satysfiType :
+  | satysfiType_cont SATySFiList {SATySFiList($1)}
+  | satysfiType_cont {$1}
 str_lstcont:
   | { [] }
   | String { [$1] }

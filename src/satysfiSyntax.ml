@@ -2,6 +2,24 @@ open Range
 open String
 open Types
 
+let fold_lefti f init lst =
+  let rec sub i f init lst =
+    match lst with
+    | [] -> init
+    | x :: xs -> sub (i + 1) f (f i init x) xs
+  in
+  sub 0 f init lst
+
+let rec take i lst =
+  match lst with
+    | []      -> []
+    | x :: xs -> (
+        if i < 0 then
+          []
+        else
+          x :: (take (i - 1) xs)
+    )
+
 let from_inline_text it =
   "{" ^ it ^ "}"
 
@@ -71,16 +89,24 @@ let from_color  color =
   | CMYK(c, m, y, k) _> "CMYK(" ^ to_tuple_f show_float [c;m;y;k] ^ ")"
 *)
 
-let from_type satysfi_type str =
-  let f =
-  match satysfi_type with
-    | SATySFiString(_) -> from_string
-    | SATySFiBool(_) -> to_bool
-    | SATySFiInt(_) -> to_int
-    | SATySFiFloat(_) -> to_float
-    | SATySFiInlineText(_) -> from_inline_text
-    | SATySFiBlockText(_) -> from_block_text_pro
-    | SATySFiFunction(_) -> (fun str -> str)
-    | _ -> from_string
+
+let to_satysfi_list t =
+  let join i s1 s2 =
+    if i == 0 then
+      s2
+    else
+      s1 ^ "; " ^ s2
   in
-    f str
+let l = fold_lefti join "" t in
+    "[" ^ l ^ "]"
+
+let rec from_type satysfi_type str =
+  match satysfi_type with
+    | SATySFiString(_) -> from_string str
+    | SATySFiBool(_) -> to_bool str
+    | SATySFiInt(_) -> to_int str
+    | SATySFiFloat(_) -> to_float str
+    | SATySFiInlineText(_) -> from_inline_text str
+    | SATySFiBlockText(_) -> from_block_text_pro str
+    | SATySFiFunction(_) -> str
+    | _ -> str

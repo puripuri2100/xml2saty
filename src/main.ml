@@ -59,7 +59,10 @@ let xml2string config xml =
       in
       let tag_name = ConfigApply.to_cmd btag tag in
       let children_str =
-        List.fold_right join_str (List.map (sub tag) children) ""
+        if ConfigApply.is_list tag then
+          SatysfiSyntax.to_satysfi_list (List.map (fun s -> s |> sub tag |> ConfigApply.type_paren_list btag) children)
+        else
+          List.fold_right join_str (List.map (sub tag) children) ""
       in
         "\n" ^ tag_name
           ^ attrib
@@ -80,12 +83,15 @@ let xml2string config xml =
         in
         let fun_name = String.uncapitalize_ascii tag in
         let children_str =
-          List.fold_right join_str (List.map (sub tag) children) ""
+          if ConfigApply.is_list tag then
+            SatysfiSyntax.to_satysfi_list (List.map (fun s -> s |> sub tag |> ConfigApply.type_paren_list tag) children)
+          else
+            List.fold_right join_str (List.map (sub tag) children) ""
         in
           "\n" ^ fun_name
             ^ attrib
             ^ ConfigApply.type_paren tag children_str
-    | PCData(str) -> SatysfiSyntax.from_string str
+    | PCData(str) -> str
 
 
 let main_of_xml (output_file_name: string) (config_file_name: string) (input_xml: Xml.xml) =

@@ -52,6 +52,10 @@ rule lex = parse
       let pos = get_pos lexbuf in
       SATySFiBlockText(pos)
     }
+  | "list" {
+      let pos = get_pos lexbuf in
+      SATySFiList(pos)
+    }
   | "(*" {
       let pos = get_pos lexbuf in
       LComment(pos)
