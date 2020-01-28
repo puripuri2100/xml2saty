@@ -14,4 +14,8 @@ val set_attrib : string -> string * string -> (string * int) option
 
 val type_paren : string -> string -> string
 
+val type_paren_list : string -> string -> string
+
 val type_semicolon : string -> string
+
+val is_list : string -> bool

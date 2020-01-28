@@ -12,11 +12,11 @@
 %token <Range.t>SATySFiLength
 %token <Range.t>SATySFiInlineText
 %token <Range.t>SATySFiBlockText
+%token <Range.t> SATySFiList
 %token <Range.t>LPAREN
 %token <Range.t>RPAREN
 %token <Range.t>LBRAC
 %token <Range.t>RBRAC
-%token <Range.t>Colon
 %token <Range.t>SemiColon
 %token <Range.t>Comma
 %token <Range.t>LComment
@@ -38,7 +38,7 @@
 parse :
   | term EOF { $1 }
 ;
-satysfiType :
+satysfiType_cont :
   | SATySFiFunction {SATySFiFunction($1)}
   | SATySFiString {SATySFiString($1)}
   | SATySFiBool {SATySFiBool($1)}
@@ -48,6 +48,9 @@ satysfiType :
   | SATySFiInlineText {SATySFiInlineText($1)}
   | SATySFiBlockText {SATySFiBlockText($1)}
 ;
+satysfiType :
+  | satysfiType_cont SATySFiList {SATySFiList($1)}
+  | satysfiType_cont {$1}
 str_lstcont:
   | { [] }
   | String { [$1] }
@@ -80,9 +83,9 @@ attribs_lst:
   | LBRAC attribs_lstcont RBRAC { $2 }
 ;
 term :
-  | Require Colon str_lst term { TmRequirePackage($3, $4)  }
-  | Import Colon str_lst term { TmImportPackage($3, $4)  }
-  | Attrib Colon attribs_lst term {TmAttrib($3, $4)}
+  | Require str_lst term { TmRequirePackage($2, $3)  }
+  | Import str_lst term { TmImportPackage($2, $3)  }
+  | Attrib attribs_lst term {TmAttrib($2, $3)}
   | LComment String RComment term { TmComment($2, $4) }
   | LPAREN term RPAREN {$2}
   | EOF {TmEOF}

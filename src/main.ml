@@ -41,11 +41,41 @@ let ord_int n1 n2 =
     else
       -1
 
-let join_str s1 s2 = s1 ^ "\n" ^ s2
+
+let fold_lefti f init lst =
+  let rec sub i f init lst =
+    match lst with
+    | [] -> init
+    | x :: xs -> sub (i + 1) f (f i init x) xs
+  in
+  sub 0 f init lst
+
+let rec take i lst =
+  match lst with
+    | []      -> []
+    | x :: xs -> (
+        if i < 0 then
+          []
+        else
+          x :: (take (i - 1) xs)
+    )
+
+let rec make_tab n =
+  if n <= 0 then
+    ""
+  else
+    "  " ^ (make_tab (n - 1))
+
+
+let join_str i s1 s2 =
+  if i == 0 then
+    s2
+  else
+    s1 ^ "\n" ^ s2
 
 let xml2string config xml =
   let () = ConfigState.set_all config in
-  let rec sub btag xml =
+  let rec sub n btag xml =
     match xml with
     | Element(tag, attrib_lst, children) ->
       let attib_str_lst =
@@ -55,13 +85,16 @@ let xml2string config xml =
       in
       let attrib =
         let f (str, n) = add_paren str in
-        List.fold_right join_str (List.map f attib_str_lst) ""
+        fold_lefti join_str "" (List.map f attib_str_lst)
       in
       let tag_name = ConfigApply.to_cmd btag tag in
       let children_str =
-        List.fold_right join_str (List.map (sub tag) children) ""
+        if ConfigApply.is_list tag then
+          SatysfiSyntax.to_satysfi_list (List.map (fun s -> s |> sub (n+1) tag |> ConfigApply.type_paren_list tag) children)
+        else
+          fold_lefti join_str "" (List.map (sub (n+1) tag) children)
       in
-        "\n" ^ tag_name
+          tag_name
           ^ attrib
           ^ ConfigApply.type_paren tag children_str
           ^ ConfigApply.type_semicolon btag
@@ -76,16 +109,20 @@ let xml2string config xml =
         in
         let attrib =
           let f (str, n) = add_paren str in
-          List.fold_right join_str (List.map f attib_str_lst) ""
+          fold_lefti join_str "" (List.map f attib_str_lst)
         in
         let fun_name = String.uncapitalize_ascii tag in
         let children_str =
-          List.fold_right join_str (List.map (sub tag) children) ""
+          if ConfigApply.is_list tag then
+            SatysfiSyntax.to_satysfi_list (List.map (fun s -> s |> sub 0 tag |> ConfigApply.type_paren_list tag) children)
+          else
+          fold_lefti join_str "" (List.map (sub 0 tag) children)
         in
-          "\n" ^ fun_name
+          fun_name
             ^ attrib
             ^ ConfigApply.type_paren tag children_str
-    | PCData(str) -> SatysfiSyntax.from_string str
+            ^ "\n"
+    | PCData(str) -> str
 
 
 let main_of_xml (output_file_name: string) (config_file_name: string) (input_xml: Xml.xml) =
