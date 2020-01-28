@@ -1,6 +1,7 @@
 %{
   open Range
   open Types
+  open Error
 %}
 
 %token <Range.t>SATySFiFunction

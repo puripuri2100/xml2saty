@@ -1,19 +1,27 @@
+open Range
+
+exception Lexer_error_range of Range.t
+
+exception Parser_error
+
 
 type t =
-  | All of string
+  | Lexer
+  | Parser
 
 
-let to_string err =
-    match err with
-    | All(str) -> "![Error] "^ str
+let print_error (t:t) str =
+  let err_title =
+    match t with
+    | Lexer -> "Lexer"
+    | Parser -> "Parser"
+  in
+  Printf.printf "![%sError]\n%s\n" err_title str
 
-
-let print_error err =
-(*
-  failwith "%s\n" (err |> to_string)
-*)
-  Printf.printf "%s\n" (err |> to_string)
-
-
-let make_error_all str =
-  All(str)
+let error_msg t =
+  try
+    t ()
+  with
+    | Lexer_error_range(pos) ->
+      let range = Range.to_string pos in
+      print_error Lexer range

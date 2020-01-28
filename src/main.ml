@@ -155,26 +155,28 @@ let arg_spec curdir =
 
 
 let main =
-  let curdir = Sys.getcwd () in
-  Arg.parse (arg_spec curdir) (arg_input_file curdir) "";
-    if OptionState.is_do_not_parse () then
-      ()
-    else
-      if OptionState.is_file_mode () then
-        let make_output_file =
-          let file = Filename.chop_extension (OptionState.input_file () |> option_from "") in
-            file ^ ".saty"
-        in
-        let make_config_file =
-          let file = Filename.chop_extension (OptionState.input_file () |> option_from "") in
-            file ^ ".x2s-config"
-        in
-        let output_file_name = OptionState.output_file () |> option_from make_output_file in
-        let config_file_name = OptionState.config_file () |> option_from make_config_file in
-        let input_xml = OptionState.input_file () |> option_from "" |> Xml.parse_file in
-        main_of_xml output_file_name config_file_name input_xml
+  Error.error_msg (fun () ->
+    let curdir = Sys.getcwd () in
+    Arg.parse (arg_spec curdir) (arg_input_file curdir) "";
+      if OptionState.is_do_not_parse () then
+        ()
       else
-        let output_file_name = OptionState.output_file () |> option_from "" in
-        let config_file_name = OptionState.config_file () |> option_from "" in
-        let input_xml = OptionState.input_text () |> option_from "" |> Xml.parse_string in
-        main_of_xml output_file_name config_file_name input_xml
+        if OptionState.is_file_mode () then
+          let make_output_file =
+            let file = Filename.chop_extension (OptionState.input_file () |> option_from "") in
+              file ^ ".saty"
+          in
+          let make_config_file =
+            let file = Filename.chop_extension (OptionState.input_file () |> option_from "") in
+              file ^ ".x2s-config"
+          in
+          let output_file_name = OptionState.output_file () |> option_from make_output_file in
+          let config_file_name = OptionState.config_file () |> option_from make_config_file in
+          let input_xml = OptionState.input_file () |> option_from "" |> Xml.parse_file in
+          main_of_xml output_file_name config_file_name input_xml
+        else
+          let output_file_name = OptionState.output_file () |> option_from "" in
+          let config_file_name = OptionState.config_file () |> option_from "" in
+          let input_xml = OptionState.input_text () |> option_from "" |> Xml.parse_string in
+          main_of_xml output_file_name config_file_name input_xml
+  )

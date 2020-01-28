@@ -1,8 +1,6 @@
+open Range
 
-type t
+exception Lexer_error_range of Range.t
+exception Parser_error
 
-val to_string : t -> string
-
-val print_error : t -> unit
-
-val make_error_all : string -> t
+val error_msg : (unit -> unit) -> unit

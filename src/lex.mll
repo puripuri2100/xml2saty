@@ -1,5 +1,6 @@
 {
   open Parse
+  open Error
 
   let get_pos lexbuf =
     let posS = Lexing.lexeme_start_p lexbuf in
@@ -112,4 +113,8 @@ rule lex = parse
       String(pos, str)
     }
   | eof {EOF}
+  | _  {
+    let pos = get_pos lexbuf in
+    raise (Error.Lexer_error_range pos)
+  }
  
