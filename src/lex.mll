@@ -16,7 +16,7 @@ let space = [' ' '\t' '\n' '\r']
 let digit = ['0'-'9']
 let alpha = ( ['a'-'z'] | ['A'-'Z'] )
 let alnum = digit | alpha
-let string = [^ ' ' '\t' '\n' '\r' '(' ')' '[' ']' ',' ';' ':' '*' '"']
+let string = [^ ' ' '\t' '\n' '\r' '(' ')' '[' ']' ',' ';' '*' '"']
 
 rule lex = parse
   | space+   { lex lexbuf }
@@ -79,10 +79,6 @@ rule lex = parse
   | ']' {
       let pos = get_pos lexbuf in
       RBRAC(pos)
-    }
-  | ':' {
-      let pos = get_pos lexbuf in
-      Colon(pos)
     }
   | ';' {
       let pos = get_pos lexbuf in

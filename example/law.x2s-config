@@ -1,9 +1,9 @@
-require:[stdja]
+require [stdja]
 
-import:[local]
+import [local]
 
 (*comment*)
-attrib :
+attrib
   [
     Ruby(inline-text)[];
     Rt(inline-text)[];

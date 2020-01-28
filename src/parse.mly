@@ -16,7 +16,6 @@
 %token <Range.t>RPAREN
 %token <Range.t>LBRAC
 %token <Range.t>RBRAC
-%token <Range.t>Colon
 %token <Range.t>SemiColon
 %token <Range.t>Comma
 %token <Range.t>LComment
@@ -80,9 +79,9 @@ attribs_lst:
   | LBRAC attribs_lstcont RBRAC { $2 }
 ;
 term :
-  | Require Colon str_lst term { TmRequirePackage($3, $4)  }
-  | Import Colon str_lst term { TmImportPackage($3, $4)  }
-  | Attrib Colon attribs_lst term {TmAttrib($3, $4)}
+  | Require str_lst term { TmRequirePackage($2, $3)  }
+  | Import str_lst term { TmImportPackage($2, $3)  }
+  | Attrib attribs_lst term {TmAttrib($2, $3)}
   | LComment String RComment term { TmComment($2, $4) }
   | LPAREN term RPAREN {$2}
   | EOF {TmEOF}
