@@ -18,7 +18,7 @@ type term =
   | TmString of string
   | TmRequirePackage of (Range.t * string) list * term
   | TmImportPackage of (Range.t * string) list * term
-  | TmComment of (Range.t * string) * term
+  | TmComment of (Range.t * string) list * term
   | TmAttrib of attribs list * term
   | TmNull
   | TmEOF

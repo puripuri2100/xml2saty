@@ -24,7 +24,6 @@
 %token <Range.t>DoubleQuotation
 %token <Range.t * string>String
 %token <Range.t * int>Int
-%token <Range.t * string>Path
 %token <Range.t>Require
 %token <Range.t>Import
 %token <Range.t>Attrib
@@ -82,11 +81,19 @@ attribs_lstcont:
 attribs_lst:
   | LBRAC attribs_lstcont RBRAC { $2 }
 ;
+comment_cont:
+  | {[]}
+  | String {[$1]}
+  | String comment_cont {$1 :: $2}
+;
+comment:
+  | LComment comment_cont RComment {$2}
+;
 term :
   | Require str_lst term { TmRequirePackage($2, $3)  }
   | Import str_lst term { TmImportPackage($2, $3)  }
   | Attrib attribs_lst term {TmAttrib($2, $3)}
-  | LComment String RComment term { TmComment($2, $4) }
+  | comment term { TmComment($1, $2) }
   | LPAREN term RPAREN {$2}
   | EOF {TmEOF}
 ;
