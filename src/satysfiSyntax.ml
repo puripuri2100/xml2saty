@@ -95,10 +95,10 @@ let to_satysfi_list t =
     if i == 0 then
       s2
     else
-      s1 ^ "; " ^ s2
+      s1 ^ ";\n" ^ s2
   in
 let l = fold_lefti join "" t in
-    "[" ^ l ^ "]"
+    "[\n" ^ l ^ "\n]"
 
 let rec from_type satysfi_type str =
   match satysfi_type with

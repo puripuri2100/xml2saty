@@ -5,25 +5,6 @@ open SatysfiSyntax
 
 let add_paren str = "(" ^ str ^ ")"
 
-(*
-let tag tag_name opt_lst children =
-  let blockCmd_lst = ConfigState.get_blockCmd () in
-  let if_blockCmd = List.exists ((=) tag_name) blockCmd_lst in
-  let blockCmdPro_lst = ConfigState.get_blockCmdPro () in
-  let if_blockCmdPro = List.exists ((=) tag_name) blockCmdPro_lst in
-  let inlineCmd_lst = ConfigState.get_inlineCmd () in
-  let if_inlineCmd = List.exists ((=) tag_name) inlineCmd_lst in
-    if if_blockCmd then
-      "+" ^ tag_name ^ opt_lst ^ children ^ ";"
-    else
-      if if_blockCmdPro then
-        "+" ^ tag_name ^ opt_lst ^ children ^ ";"
-      else
-        if if_inlineCmd then
-          "\\" ^ tag_name ^ opt_lst ^ children ^ ";"
-        else
-          tag_name ^ opt_lst ^ children |> String.uncapitalize_ascii
-*)
 
 let get_satysfi_type t =
   match t with
