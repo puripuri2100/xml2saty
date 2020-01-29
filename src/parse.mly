@@ -27,6 +27,7 @@
 %token <Range.t>Require
 %token <Range.t>Import
 %token <Range.t>Attrib
+%token <Range.t>Arrow
 %token EOF
 
 %start parse
@@ -70,8 +71,10 @@ attrib_lst:
   | LBRAC attrib_lstcont RBRAC { $2 }
 ;
 attribs :
-  | String attrib_lst {$1,None , $2}
-  | String LPAREN satysfiType RPAREN attrib_lst {$1, Some($3), $5}
+  | String attrib_lst {$1, None,None , $2}
+  | String LPAREN satysfiType RPAREN attrib_lst {$1, None, Some($3), $5}
+  | String Arrow String attrib_lst {$1, Some($3),None , $4}
+  | String Arrow String LPAREN satysfiType RPAREN attrib_lst {$1, Some($3), Some($5), $7}
 ;
 attribs_lstcont:
   | { [] }

@@ -12,7 +12,7 @@ type satysfiType =
   | SATySFiList of satysfiType
 
 
-type attribs = (Range.t * string) * satysfiType option * (((Range.t * string) * satysfiType * (Range.t * int)) list)
+type attribs = (Range.t * string) * (Range.t * string) option * satysfiType option * (((Range.t * string) * satysfiType * (Range.t * int)) list)
 
 type term =
   | TmString of string
