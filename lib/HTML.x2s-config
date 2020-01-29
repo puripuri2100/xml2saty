@@ -1,0 +1,134 @@
+
+(*
+  reference:
+    - http://www.htmq.com/html5
+*)
+
+attrib[
+  html (block-text)[];
+
+  head (block-text)[];
+  title (inline-text)[];
+  base [
+    (href, string, 1)
+  ];
+  link [
+    (href, string, 1);
+    (rel, string, 1);
+    (media, string, 1);
+    (hrefflag, string, 1);
+    (type, string, 1);
+    (sizes, string, 1);
+  ];
+  meta [];
+  style (string) [];
+
+  script (string)[];
+  noscript (string)[];
+
+  body (block-text)[];
+  section (block-text)[];
+  nav (block-text)[];
+  article (block-text)[];
+  aside (block-text)[];
+  h1 (inline-text)[];
+  h2 (inline-text)[];
+  h3 (inline-text)[];
+  h4 (inline-text)[];
+  h5 (inline-text)[];
+  h6 (inline-text)[];
+  header (block-text)[];
+  footer (block-text)[];
+  address (block-text)[];
+
+  p (inline-text)[];
+  hr [];
+  pre [];
+  blockquote (block-text)[];
+  ul (block-text list)[];
+  ol (block-text list)[];
+  li (inline-text)[];
+  dl (block-text list)[];
+  dt (inline-text)[];
+  dd (inline-text)[];
+  figure (block-text)[];
+  figcaption (inline-text)[];
+  div (block-text)[];
+  main (block-text)[];
+
+  a (inline-text)[];
+  em (inline-text)[];
+  strong (inline-text)[];
+  small (inline-text)[];
+  s (inline-text)[];
+  cite (inline-text)[];
+  q (inline-text)[];
+  dfn (inline-text)[];
+  abbr (inline-text)[];
+  time (inline-text)[];
+  code (inline-text)[];
+  var (inline-text)[];
+  samp (inline-text)[];
+  kbd (inline-text)[];
+  sub (inline-text)[];
+  sup (inline-text)[];
+  i (inline-text)[];
+  b (inline-text)[];
+  mark (inline-text)[];
+  ruby (inline-text)[];
+  rt (inline-text)[];
+  rp (inline-text)[];
+  bdo (inline-text)[
+    (dir, string, 1);
+  ];
+  span (inline-text)[];
+  br [];
+  wbr [];
+
+  ins (block-text)[];
+  del (block-text)[];
+
+  img [];
+  iframe (inline-text)[];
+  embed [];
+  object (block-text)[];
+  param [];
+  video (block-text)[];
+  audio (block-text)[];
+  source [];
+  canvas (inline-text)[];
+  map (block-text)[];
+  area [];
+
+  table (block-text list)[];
+  caption (inline-text)[];
+  colgroup [];
+  col [];
+  tbody (block-text list)[];
+  thead (block-text list)[];
+  tfoot (block-text list)[];
+  tr (inline-text list)[];
+  td (inline-text)[];
+  th (inline-text)[];
+
+  form (block-text)[];
+  fieldset (block-text)[];
+  lengend (inline-text)[];
+  label (inline-text)[];
+  input [];
+  button (inline-text)[];
+  select (inline-text list)[];
+  datalist (inline-text list)[];
+  optgroup (inline-text list)[];
+  option (inline-text)[];
+  textarea (inline-text)[];
+  keygen [];
+  output [];
+  progress (inline-text)[];
+  meter (inline-text)[];
+
+  details (block-text list)[];
+  summary (block-text list)[];
+  menu (block-text list)[];
+]
+
