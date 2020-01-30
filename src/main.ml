@@ -111,7 +111,20 @@ let xml2string config xml =
           let f (str, n) = add_paren str in
           fold_lefti join_str "" (List.map f attib_str_lst)
         in
-        let fun_name = String.uncapitalize_ascii tag in
+        let eq_new ((_,name),_,_,_) = (tag = name) in
+        let attrib_lst = ConfigState.get_attrib () in
+        let new_tag_name_opt =
+          try
+            List.find eq_new attrib_lst
+            |> (fun (_, opt, _, _) -> opt)
+          with _ -> None
+        in
+        let new_tag_name =
+          match new_tag_name_opt with
+          | Some((_,s)) -> s
+          | None -> tag
+        in
+        let fun_name = String.uncapitalize_ascii new_tag_name in
         let children_str =
           if ConfigApply.is_list tag then
             SatysfiSyntax.to_satysfi_list (List.map (fun s -> s |> sub 0 tag |> ConfigApply.type_paren_list tag) children)
