@@ -101,13 +101,22 @@ let set_attrib tag lst =
   let size =
     match size_opt with
     | None -> List.length attrib_lst
-    | Some(_,n) -> n
+    | Some(_,n) ->
+      if n < 0 then
+        List.length attrib_lst
+      else
+        n
   in
   let initial_array:(string option) array = Array.make (size) None in
   let f (attrib,var) =
     try
       List.find (fun ((_, attrib_name), _, _) -> attrib_name = attrib) attrib_lst
-        |> (fun (_, satysfi_type, (_, n)) -> initial_array.(n - 1) <- Some(SatysfiSyntax.from_type satysfi_type var))
+        |> (fun (_, satysfi_type, (_, n)) ->
+          if n > size || n <= 0 then
+            ()
+          else
+            initial_array.(n - 1) <- Some(SatysfiSyntax.from_type satysfi_type var)
+        )
     with
     | Not_found -> ()
   in
