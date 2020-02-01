@@ -5,9 +5,9 @@ import [local]
 (*comment*)
 attrib
   [
-    Ruby(inline-text)[];
-    Rt(inline-text)[];
-    Law (block-text)[
+    Ruby(inline-text)(0)[];
+    Rt(inline-text)(0)[];
+    Law (block-text)(5)[
       (Era, string, 1);
       (Lang, string, 2);
       (LawType, string, 3);
@@ -20,7 +20,7 @@ attrib
     EnactStatement(inline-text)[];
     TOC(block-text)[];
     TOCLabel(inline-text)[];
-    TOCPart(block-text)[
+    TOCPart(block-text)(2)[
       (Delete, bool, 1);
       (Num, int, 2);
     ];

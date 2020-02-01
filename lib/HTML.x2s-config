@@ -9,10 +9,10 @@ attrib[
 
   head (block-text)[];
   title (inline-text)[];
-  base [
+  base (1)[
     (href, string, 1)
   ];
-  link [
+  link (6)[
     (href, string, 1);
     (rel, string, 1);
     (media, string, 1);
@@ -21,7 +21,7 @@ attrib[
     (sizes, string, 1);
   ];
   meta [];
-  style (string) [];
+  style (string)[];
 
   script (string)[];
   noscript (string)[];
@@ -78,7 +78,7 @@ attrib[
   ruby (inline-text)[];
   rt (inline-text)[];
   rp (inline-text)[];
-  bdo (inline-text)[
+  bdo (inline-text)(1)[
     (dir, string, 1);
   ];
   span (inline-text)[];

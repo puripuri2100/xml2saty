@@ -10,7 +10,7 @@ val importPackage : unit -> string
 
 val pcdata : string -> string -> string
 
-val set_attrib : string -> string * string -> (string * int) option
+val set_attrib : string -> (string * string) list -> string list
 
 val type_paren : string -> string -> string
 

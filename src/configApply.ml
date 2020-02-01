@@ -17,20 +17,20 @@ let to_cmd btag tag_name =
     | Some(v) -> v
     | None -> d
   in
-  let eq_old ((_,name),_,_,_) = (btag = name) in
-  let eq_new ((_,name),_,_,_) = (tag_name = name) in
+  let eq_old ((_,name),_,_,_,_) = (btag = name) in
+  let eq_new ((_,name),_,_,_,_) = (tag_name = name) in
   let attrib_lst = ConfigState.get_attrib () in
   let satysfi_type =
     try
       List.find eq_old attrib_lst
-      |> (fun (_, _, t, _) -> t)
+      |> (fun (_, _, t,_, _) -> t)
       |> get_opt (SATySFiFunction(Range.dummy "ConfigApply:to_cmd"))
     with _ -> SATySFiFunction(Range.dummy "ConfigApply:to_cmd")
   in
   let new_tag_name_opt =
     try
       List.find eq_new attrib_lst
-      |> (fun (_, opt, _, _) -> opt)
+      |> (fun (_, opt, _,_, _) -> opt)
     with _ -> None
   in
   let new_tag_name =
@@ -78,24 +78,46 @@ let pcdata tag str =
     str
 
 
+let rec apply v lst =
+  match lst with
+  | [] -> []
+  | x :: xs ->
+    if x == v then
+      v :: (apply v lst)
+    else
+      x :: (apply v lst)
 
-let set_attrib tag (attrib, var) =
+
+
+let set_attrib tag lst =
   let attribs_lst = ConfigState.get_attrib () in
-  let attrib_lst =
+  let (attrib_lst, size_opt) =
     try
-      List.find (fun ((_, tag_name), _, _, _) -> tag_name = tag) attribs_lst
-        |> (fun (_, _, _, lst) -> lst)
+      List.find (fun ((_, tag_name), _,_, _, _) -> tag_name = tag) attribs_lst
+        |> (fun (_, _, _, n, lst) -> (lst,n))
     with
-    | Not_found -> []
+    | Not_found -> ([],None)
   in
-  let v =
+  let size =
+    match size_opt with
+    | None -> List.length attrib_lst
+    | Some(_,n) -> n
+  in
+  let initial_array:(string option) array = Array.make (size) None in
+  let f (attrib,var) =
     try
       List.find (fun ((_, attrib_name), _, _) -> attrib_name = attrib) attrib_lst
-        |> (fun (_, satysfi_type, (_, n)) -> Some(SatysfiSyntax.from_type satysfi_type var, n))
+        |> (fun (_, satysfi_type, (_, n)) -> initial_array.(n - 1) <- Some(SatysfiSyntax.from_type satysfi_type var))
     with
-    | Not_found -> None
+    | Not_found -> ()
   in
-    v
+  let () = List.iter f lst in
+  let show_opt opt =
+    match opt with
+    | None -> "None"
+    | Some(str) -> "Some"^(add_paren str)
+  in
+  Array.map show_opt initial_array |> Array.to_list
 
 
 let type_paren tag_name str =
@@ -104,10 +126,10 @@ let type_paren tag_name str =
     | Some(v) -> v
     | None -> SATySFiFunction(Range.dummy "ConfigApply:type_paren")
   in
-  let eq ((_,name),_,_,_) = (tag_name = name) in
+  let eq ((_,name),_,_,_,_) = (tag_name = name) in
   let attrib_lst = ConfigState.get_attrib () in
   let satysfi_type =
-    try List.find eq attrib_lst |> (fun (_, _, t, _) -> t) |> get_opt
+    try List.find eq attrib_lst |> (fun (_, _, t,_, _) -> t) |> get_opt
     with _ -> SATySFiFunction(Range.dummy "ConfigApply:type_paren")
   in
   SatysfiSyntax.from_type satysfi_type str |> add_paren
@@ -119,10 +141,10 @@ let type_paren_list tag_name str =
     | Some(v) -> v
     | None -> SATySFiFunction(Range.dummy "ConfigApply:type_paren")
   in
-  let eq ((_,name),_,_,_) = (tag_name = name) in
+  let eq ((_,name),_,_,_,_) = (tag_name = name) in
   let attrib_lst = ConfigState.get_attrib () in
   let satysfi_type =
-    try List.find eq attrib_lst |> (fun (_, _, t, _) -> t) |> get_opt
+    try List.find eq attrib_lst |> (fun (_, _, t,_, _) -> t) |> get_opt
     with _ -> SATySFiFunction(Range.dummy "ConfigApply:type_paren")
   in
   SatysfiSyntax.from_type (get_satysfi_type satysfi_type) str |> add_paren
@@ -134,10 +156,10 @@ let type_semicolon tag_name =
     | Some(v) -> v
     | None -> SATySFiFunction(Range.dummy "ConfigApply:type_semicolon")
   in
-  let eq ((_,name),_,_,_) = (tag_name = name) in
+  let eq ((_,name),_,_,_,_) = (tag_name = name) in
   let attrib_lst = ConfigState.get_attrib () in
   let satysfi_type =
-    try List.find eq attrib_lst |> (fun (_, _, t, _) -> t) |> get_opt
+    try List.find eq attrib_lst |> (fun (_, _, t, _, _) -> t) |> get_opt
     with _ -> SATySFiFunction(Range.dummy "ConfigApply:type_semicolon")
   in
   match satysfi_type with
@@ -152,10 +174,10 @@ let is_list tag_name =
     | Some(v) -> v
     | None -> SATySFiFunction(Range.dummy "ConfigApply:type_semicolon")
   in
-  let eq ((_,name),_,_,_) = (tag_name = name) in
+  let eq ((_,name),_,_,_,_) = (tag_name = name) in
   let attrib_lst = ConfigState.get_attrib () in
   let satysfi_type =
-    try List.find eq attrib_lst |> (fun (_, _, t, _) -> t) |> get_opt
+    try List.find eq attrib_lst |> (fun (_, _, t, _, _) -> t) |> get_opt
     with _ -> SATySFiFunction(Range.dummy "ConfigApply:type_semicolon")
   in
   match satysfi_type with

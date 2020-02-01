@@ -71,10 +71,22 @@ attrib_lst:
   | LBRAC attrib_lstcont RBRAC { $2 }
 ;
 attribs :
-  | String attrib_lst {$1, None,None , $2}
-  | String LPAREN satysfiType RPAREN attrib_lst {$1, None, Some($3), $5}
-  | String Arrow String attrib_lst {$1, Some($3),None , $4}
-  | String Arrow String LPAREN satysfiType RPAREN attrib_lst {$1, Some($3), Some($5), $7}
+  | name=String lst=attrib_lst
+    {name, None,         None,    None,    lst}
+  | name=String LPAREN n=Int RPAREN lst=attrib_lst
+    {name, None,         None,    Some(n), lst}
+  | name=String LPAREN t=satysfiType RPAREN lst=attrib_lst
+    {name, None,         Some(t), None,    lst}
+  | name=String LPAREN t=satysfiType RPAREN LPAREN n=Int RPAREN lst=attrib_lst
+    {name, None,         Some(t), Some(n), lst}
+  | name=String Arrow n_name=String lst=attrib_lst
+    {name, Some(n_name), None,    None,    lst}
+  | name=String Arrow n_name=String LPAREN n=Int RPAREN lst=attrib_lst
+    {name, Some(n_name), None,    Some(n), lst}
+  | name=String Arrow n_name=String LPAREN t=satysfiType RPAREN lst=attrib_lst
+    {name, Some(n_name), Some(t), None,    lst}
+  | name=String Arrow n_name=String LPAREN t=satysfiType RPAREN LPAREN n=Int RPAREN lst=attrib_lst
+    {name, Some(n_name), Some(t), Some(n), lst}
 ;
 attribs_lstcont:
   | { [] }

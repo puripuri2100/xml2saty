@@ -79,12 +79,10 @@ let xml2string config xml =
     match xml with
     | Element(tag, attrib_lst, children) ->
       let attib_str_lst =
-        List.map (ConfigApply.set_attrib tag) attrib_lst
-        |> show_option
-        |> List.sort (fun (_, n1) (_, n2) -> ord_int n1 n2)
+        ConfigApply.set_attrib tag attrib_lst
       in
       let attrib =
-        let f (str, n) = add_paren str in
+        let f str = add_paren str in
         fold_lefti join_str "" (List.map f attib_str_lst)
       in
       let tag_name = ConfigApply.to_cmd btag tag in
@@ -103,20 +101,18 @@ let xml2string config xml =
   match xml with
     | Element(tag, attrib_lst, children) ->
         let attib_str_lst =
-          List.map (ConfigApply.set_attrib tag) attrib_lst
-          |> show_option
-          |> List.sort (fun (_, n1) (_, n2) -> ord_int n1 n2)
+          ConfigApply.set_attrib tag attrib_lst
         in
         let attrib =
-          let f (str, n) = add_paren str in
+          let f str = add_paren str in
           fold_lefti join_str "" (List.map f attib_str_lst)
         in
-        let eq_new ((_,name),_,_,_) = (tag = name) in
+        let eq_new ((_,name),_,_,_,_) = (tag = name) in
         let attrib_lst = ConfigState.get_attrib () in
         let new_tag_name_opt =
           try
             List.find eq_new attrib_lst
-            |> (fun (_, opt, _, _) -> opt)
+            |> (fun (_, opt, _, _, _) -> opt)
           with _ -> None
         in
         let new_tag_name =
