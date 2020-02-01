@@ -14,11 +14,11 @@ attrib[
   ];
   link (6)[
     (href, string, 1);
-    (rel, string, 1);
-    (media, string, 1);
-    (hrefflag, string, 1);
-    (type, string, 1);
-    (sizes, string, 1);
+    (rel, string, 2);
+    (media, string, 3);
+    (hrefflag, string, 4);
+    (type, string, 5);
+    (sizes, string, 6);
   ];
   meta [];
   style (string)[];
