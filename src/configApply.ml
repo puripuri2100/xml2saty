@@ -78,17 +78,6 @@ let pcdata tag str =
     str
 
 
-let rec apply v lst =
-  match lst with
-  | [] -> []
-  | x :: xs ->
-    if x == v then
-      v :: (apply v lst)
-    else
-      x :: (apply v lst)
-
-
-
 let set_attrib tag lst =
   let attribs_lst = ConfigState.get_attrib () in
   let (attrib_lst, size_opt) =
