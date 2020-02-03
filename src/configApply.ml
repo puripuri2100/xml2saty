@@ -1,3 +1,4 @@
+open Str
 open Types
 open ConfigState
 open SatysfiSyntax
@@ -58,24 +59,52 @@ let importPackage () =
     |> List.fold_left join ""
 
 
-let pcdata tag str =
-(*
+let pcdata btag str =
+  let eq ((_,name),_,_,_,_) = (btag = name) in
   let attrib_lst = ConfigState.get_attrib () in
-  let tag_lst_pcdata_type_opt =
+  let is_inline_text =
     try
-      List.find (fun (tag, _, _) -> btag = tag) attrib_lst
-        |> (fun (_, t, _) -> t)
-    with
-      | Not_found -> None
-      | _ -> None
+      let t =
+        List.find eq attrib_lst
+        |> (fun (_, _, t,_, _) -> t)
+      in
+      match t with
+      | Some(SATySFiInlineText(_)) -> true
+      | _ -> false
+    with _ -> false
   in
-  let tag_lst_pcdata_type =
-    match tag_lst_pcdata_type_opt with
-    | Some(t) -> t
-    | None -> SATySFiString
-  in
-*)
-    str
+    if not is_inline_text then
+      str
+    else
+      (*
+        一文字ずつ読んでエスケープ
+        {,},<,>,%,$,#.\,;,|,*,@
+      *)
+      let rec sub head tail =
+        if (String.length tail) <= 0 then
+          head
+        else
+        let str_len =
+          String.length tail
+        in
+        let str_head =
+          String.sub tail 0 1
+        in
+        let str_tail =
+          String.sub tail 1 (str_len - 1)
+        in
+        let is_escape s =
+          let escape_string =
+            ["{";"}";"<";">";"%";"$";"#";"\\";";";"|";"*";"@"]
+          in
+            List.exists ((=) s) escape_string
+        in
+        if is_escape str_head then
+          sub (head ^ "\\" ^ str_head) str_tail
+        else
+          sub (head ^ str_head) str_tail
+      in
+        sub "" str
 
 
 let set_attrib tag lst =

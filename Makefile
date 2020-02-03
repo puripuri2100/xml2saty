@@ -13,7 +13,7 @@ build: src
 	cp src/*.ml src/*.mli ${BUILD}
 	cd ${BUILD} && ocamllex lex.mll
 	cd ${BUILD} && menhir parse.mly
-	cd ${BUILD} && ocamlfind ocamlopt -o xml2saty -linkpkg -package xml-light range.ml error.mli error.ml types.ml parse.mli parse.ml lex.ml optionState.mli optionState.ml satysfiSyntax.mli satysfiSyntax.ml configState.mli configState.ml configApply.mli configApply.ml main.ml
+	cd ${BUILD} && ocamlfind ocamlopt -o xml2saty -linkpkg -package "xml-light,str" range.ml error.mli error.ml types.ml parse.mli parse.ml lex.ml optionState.mli optionState.ml satysfiSyntax.mli satysfiSyntax.ml configState.mli configState.ml configApply.mli configApply.ml main.ml
 	cp ${BUILD}/${TARGET} ./
 
 install: ${TARGET}
