@@ -108,6 +108,10 @@ rule lex = parse
       let pos = get_pos lexbuf in
       Arrow(pos)
   }
+  | "module" {
+      let pos = get_pos lexbuf in
+      Module(pos)
+  }
   | digit+ as n {
       let pos = get_pos lexbuf in
       Int(pos, int_of_string n)

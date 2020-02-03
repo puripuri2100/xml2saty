@@ -25,23 +25,6 @@ let option_from x opt =
 let add_paren str = "(" ^ str ^ ")"
 
 
-let rec show_option lst =
-  match lst with
-  | [] -> []
-  | Some(x) :: xs -> x :: show_option xs
-  | None :: xs -> show_option xs
-
-
-let ord_int n1 n2 =
-  if n1 = n2 then
-    0
-  else
-    if n1 > n2 then
-      1
-    else
-      -1
-
-
 let fold_lefti f init lst =
   let rec sub i f init lst =
     match lst with
@@ -50,15 +33,7 @@ let fold_lefti f init lst =
   in
   sub 0 f init lst
 
-let rec take i lst =
-  match lst with
-    | []      -> []
-    | x :: xs -> (
-        if i < 0 then
-          []
-        else
-          x :: (take (i - 1) xs)
-    )
+
 
 let rec make_tab n =
   if n <= 0 then
@@ -73,40 +48,40 @@ let join_str i s1 s2 =
   else
     s1 ^ "\n" ^ s2
 
+
+let make_attrib tag attrib_lst =
+  let attib_str_lst =
+    ConfigApply.set_attrib tag attrib_lst
+  in
+  let attrib =
+    let f str = add_paren str in
+    fold_lefti join_str "" (List.map f attib_str_lst)
+  in
+    attrib
+
+
 let xml2string config xml =
   let () = ConfigState.set_all config in
   let rec sub n btag xml =
     match xml with
     | Element(tag, attrib_lst, children) ->
-      let attib_str_lst =
-        ConfigApply.set_attrib tag attrib_lst
-      in
-      let attrib =
-        let f str = add_paren str in
-        fold_lefti join_str "" (List.map f attib_str_lst)
-      in
       let tag_name = ConfigApply.to_cmd btag tag in
+      let attrib = make_attrib tag attrib_lst in
       let children_str =
         if ConfigApply.is_list tag then
           SatysfiSyntax.to_satysfi_list (List.map (fun s -> s |> sub (n+1) tag |> ConfigApply.type_paren_list tag) children)
         else
           fold_lefti join_str "" (List.map (sub (n+1) tag) children)
       in
-          tag_name
-          ^ attrib
-          ^ ConfigApply.type_paren tag children_str
-          ^ ConfigApply.type_semicolon btag
+        tag_name
+        ^ attrib
+        ^ ConfigApply.type_paren tag children_str
+        ^ ConfigApply.type_semicolon btag
     | PCData(str) -> ConfigApply.pcdata btag str
   in
   match xml with
     | Element(tag, attrib_lst, children) ->
-        let attib_str_lst =
-          ConfigApply.set_attrib tag attrib_lst
-        in
-        let attrib =
-          let f str = add_paren str in
-          fold_lefti join_str "" (List.map f attib_str_lst)
-        in
+        let attrib = make_attrib tag attrib_lst in
         let eq_new ((_,name),_,_,_,_) = (tag = name) in
         let attrib_lst = ConfigState.get_attrib () in
         let new_tag_name_opt =
@@ -136,7 +111,22 @@ let xml2string config xml =
 
 let main_of_xml (output_file_name: string) (config_file_name: string) (input_xml: Xml.xml) =
   let config = open_in config_file_name |> Lexing.from_channel |> Parse.parse Lex.lex in
-  let body = xml2string config input_xml in
+  let is_package = OptionState.package () in
+  let body_str = xml2string config input_xml in
+  let body =
+    if not is_package then
+      body_str
+    else
+      let (module_name, fun_name) =
+        match ConfigState.get_module () with
+        | None -> raise (Error.Config_err "Module settings are not written.")
+        | Some((_,m),(_,f)) -> (m,f)
+      in
+      "module " ^ module_name ^ " = struct" ^ "\n" ^
+      "let " ^ fun_name ^ " = " ^ "\n" ^
+      body_str ^ "\n" ^
+      "end"
+  in
   let header =
     ConfigApply.requirePackage () ^ "\n" ^  ConfigApply.importPackage ()
   in
@@ -185,6 +175,10 @@ let arg_config curdir s =
   OptionState.set_config_file path
 
 
+let arg_package () =
+  OptionState.set_package true
+
+
 let arg_spec curdir =
   [
     ("-v",        Arg.Unit(arg_version)  , "Prints version");
@@ -197,6 +191,8 @@ let arg_spec curdir =
     ("--output", Arg.String (arg_output curdir), "Specify output file");
     ("-c",      Arg.String (arg_config curdir), "Specify config file");
     ("--config",Arg.String (arg_config curdir), "Specify config file");
+    ("-p",       Arg.Unit (arg_package), "Output as package file");
+    ("--package",Arg.Unit (arg_package), "Output as package file");
   ]
 
 

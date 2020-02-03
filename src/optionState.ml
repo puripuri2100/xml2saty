@@ -4,6 +4,7 @@ type state = {
   mutable input_text : string option;
   mutable output_file : string option;
   mutable config_file : string option;
+  mutable is_package : bool;
 }
 
 
@@ -12,6 +13,7 @@ let state = {
   input_text = None;
   output_file = None;
   config_file = None;
+  is_package = false;
 }
 
 let set_input_file path = state.input_text <- None ; state.input_file <- Some(path)
@@ -31,6 +33,10 @@ let output_file () = state.output_file
 
 let set_config_file path = state.config_file <- Some(path)
 let config_file () = state.config_file
+
+
+let set_package b = state.is_package <- b
+let package () = state.is_package
 
 
 let is_do_not_parse () =

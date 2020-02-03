@@ -10,15 +10,6 @@ let fold_lefti f init lst =
   in
   sub 0 f init lst
 
-let rec take i lst =
-  match lst with
-    | []      -> []
-    | x :: xs -> (
-        if i < 0 then
-          []
-        else
-          x :: (take (i - 1) xs)
-    )
 
 let from_inline_text it =
   "{" ^ it ^ "}"

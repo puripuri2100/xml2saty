@@ -28,6 +28,7 @@
 %token <Range.t>Import
 %token <Range.t>Attrib
 %token <Range.t>Arrow
+%token <Range.t>Module
 %token EOF
 
 %start parse
@@ -104,10 +105,14 @@ comment_cont:
 comment:
   | LComment comment_cont RComment {$2}
 ;
+moduleTerm:
+  | LPAREN String Comma String RPAREN {($2, $4)}
+;
 term :
   | Require str_lst term { TmRequirePackage($2, $3)  }
   | Import str_lst term { TmImportPackage($2, $3)  }
   | Attrib attribs_lst term {TmAttrib($2, $3)}
+  | Module v=moduleTerm term {TmModule(v, $3)}
   | comment term { TmComment($1, $2) }
   | LPAREN term RPAREN {$2}
   | EOF {TmEOF}

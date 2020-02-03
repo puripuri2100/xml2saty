@@ -13,4 +13,7 @@ val output_file : unit -> string option
 val set_config_file : string -> unit
 val config_file : unit -> string option
 
+val set_package : bool -> unit
+val package : unit -> bool
+
 val is_do_not_parse : unit -> bool
