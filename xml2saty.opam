@@ -5,7 +5,7 @@ synopsis: "This software converts xml file to SATySFi's document file."
 description: """
 This software converts xml file to SATySFis document file.
 """
-license: "UNLICENSE"
+license: "MIT"
 tags: []
 homepage: "https://github.com/puripuri2100/xml2saty"
 doc: "https://github.com/puripuri2100/xml2saty/doc"
