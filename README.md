@@ -38,20 +38,14 @@ opam init --comp 4.07.0
 opam init --comp 4.07.0 --disable-sandboxing
 ```
 
-### Install opam's library
-
-```sh
-opam install xml-light
-opam install menhir
-```
-
 ### Build
 
 ```sh
 git clone https://github.com/puripuri2100/xml2saty.git
 cd xml2saty
 
-make build
+opam pin add xml2saty .
+opam install xml2saty
 ```
 
 

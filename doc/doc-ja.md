@@ -20,21 +20,14 @@ eval $(opam env)
 ```
 などとすると良いでしょう（Ubuntu on WSLえを使っている人は`opam init`の際に`--disable-sandboxing`というオプションをつけてください）。
 バージョンは古すぎなければ大体のもので動くと思われます。
-- 依存ライブラリをインストールする
-```
-opam install xml-light
-opam install menhir
-```
-でインストールできます。既に入っている場合はしなくて大丈夫です。
 - リポジトリをクローンしてビルドする
 ```
 git clone https://github.com/puripuri2100/xml2saty.git
 cd xml2saty
-make build
+opam pin add xml2saty .
+opam install xml2saty
 ```
-でビルドができ、フォルダに`xml2saty`という名前の実行ファイルができます。
-
-後は適当にフォルダに移動させるなりしてパスを適切に設定してください。
+でビルドができ、インストールも完了します。
 
 # 使い方
 
