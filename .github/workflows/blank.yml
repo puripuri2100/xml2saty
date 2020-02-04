@@ -9,12 +9,12 @@ jobs:
     strategy:
       matrix:
         operating-system: [macos-latest, ubuntu-latest]
-        ocaml-version: [ '4.09.0', '4.08.1', '4.07.0', '4.06.0' ]
+        ocaml-version: [ '4.09.0', '4.08.1', '4.07.1', '4.06.0' ]
     steps:
     - uses: actions/checkout@master
     - uses: avsm/setup-ocaml@master
       with:
         ocaml-version: ${{ matrix.ocaml-version }}
-    - run: opam install xml-light
-    - run: opam install menhir
-    - run: make build
+    - run: opam pin add test.dev -n .
+    - run: opam depext -yt test
+    - run: opam install -t .
