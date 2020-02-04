@@ -29,13 +29,13 @@ eval $(opam env)
 ### Install ocaml (Ubuntu)
 
 ```sh
-opam init --comp 4.07.0
+opam init --comp 4.07.1
 ```
 
 ### Install ocaml (Ubuntu on WSL)
 
 ```sh
-opam init --comp 4.07.0 --disable-sandboxing
+opam init --comp 4.07.1 --disable-sandboxing
 ```
 
 ### Build
