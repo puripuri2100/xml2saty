@@ -1,3 +1,5 @@
+![](https://github.com/puripuri2100/xml2saty/workflows/CI/badge.svg)
+
 
 # xml2saty
 
