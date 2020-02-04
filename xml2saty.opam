@@ -1,9 +1,10 @@
 opam-version: "2.0"
 version: "1.0.0"
 maintainer: "puripuri2100"
-synopsis: "This software converts xml file to SATySFi's document file."
+authors: ["puripuri2100"]
+synopsis: "This software converts xml file to SATySFi's document file"
 description: """
-This software converts xml file to SATySFis document file.
+This software converts xml file to SATySFis document file
 """
 license: "MIT"
 tags: []
@@ -18,4 +19,4 @@ depends: [
 build: [
   ["make" "-f" "Makefile" "build"]
 ]
-dev-repo: "https://github.com/puripuri2100/xml2saty.git"
+dev-repo: "git+https://github.com/puripuri2100/xml2saty.git"
