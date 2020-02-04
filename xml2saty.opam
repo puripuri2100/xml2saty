@@ -17,6 +17,9 @@ depends: [
   "menhir"
 ]
 build: [
-  [make "-f" "Makefile" "build"]
+  [make "-f" "Makefile" "build" "PREFIX=%{prefix}%"]
+]
+install: [
+  [make "-f" "Makefile" "install" "PREFIX=%{prefix}%"]
 ]
 dev-repo: "git+https://github.com/puripuri2100/xml2saty.git"
