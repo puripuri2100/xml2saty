@@ -192,6 +192,8 @@ let type_semicolon tag_name =
   match satysfi_type with
   | SATySFiBlockText(_) -> ";"
   | SATySFiInlineText(_) -> ";"
+  | SATySFiList(SATySFiBlockText(_)) -> ";"
+  | SATySFiList(SATySFiInlineText(_)) -> ";"
   | _ -> ""
 
 
