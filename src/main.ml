@@ -111,17 +111,14 @@ let xml2string config xml =
 
 let main_of_xml (output_file_name: string) (config_file_name: string) (input_xml: Xml.xml) =
   let config = open_in config_file_name |> Lexing.from_channel |> Parse.parse Lex.lex in
-  let is_package = OptionState.package () in
+  let is_package = OptionState.is_package () in
   let body_str = xml2string config input_xml in
   let body =
     if not is_package then
       body_str
     else
-      let (module_name, fun_name) =
-        match ConfigState.get_module () with
-        | None -> raise (Error.Config_err "Module settings are not written.")
-        | Some((_,m),(_,f)) -> (m,f)
-      in
+      let module_name = OptionState.module_name () in
+      let fun_name = OptionState.fun_name () in
       "module " ^ module_name ^ " = struct" ^ "\n" ^
       "let " ^ fun_name ^ " = " ^ "\n" ^
       body_str ^ "\n" ^
@@ -175,8 +172,14 @@ let arg_config curdir s =
   OptionState.set_config_file path
 
 
-let arg_package () =
-  OptionState.set_package true
+let arg_package str =
+  let slst = String.split_on_char ',' str in
+  let v =
+    match slst with
+    | module_name :: fun_name :: [] -> (module_name, fun_name)
+    | _ -> raise (Error.Option_error "Enter as \"<module_name>, <function_name>\"")
+  in
+  OptionState.set_package v
 
 
 let arg_spec curdir =
@@ -191,8 +194,8 @@ let arg_spec curdir =
     ("--output", Arg.String (arg_output curdir), "Specify output file");
     ("-c",      Arg.String (arg_config curdir), "Specify config file");
     ("--config",Arg.String (arg_config curdir), "Specify config file");
-    ("-p",       Arg.Unit (arg_package), "Output as package file");
-    ("--package",Arg.Unit (arg_package), "Output as package file");
+    ("-p",       Arg.String (arg_package), "Output as package file");
+    ("--package",Arg.String (arg_package), "Output as package file");
   ]
 
 
