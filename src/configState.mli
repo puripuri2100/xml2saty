@@ -15,8 +15,4 @@ val set_attrib : Types.attribs list -> unit
 
 val get_attrib : unit -> Types.attribs list
 
-val set_module : (Range.t * string) * (Range.t * string) -> unit
-
-val get_module : unit -> ((Range.t * string) * (Range.t * string)) option
-
 val set_all : Types.term -> unit

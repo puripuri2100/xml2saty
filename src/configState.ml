@@ -5,7 +5,6 @@ type state = {
   mutable requirePackage : (Range.t * string) list;
   mutable importPackage : (Range.t * string) list;
   mutable attrib : Types.attribs list;
-  mutable module_name : ((Range.t * string) * (Range.t * string)) option ;
 }
 
 
@@ -13,7 +12,6 @@ let state = {
   requirePackage = [];
   importPackage = [];
   attrib = [];
-  module_name = None;
 }
 
 let set_requirePackage lst =
@@ -37,12 +35,6 @@ let get_attrib () =
   state.attrib
 
 
-let set_module v =
-  state.module_name <- Some(v)
-
-let get_module () =
-  state.module_name
-
 let set_all (term: Types.term) =
   let rec sub term =
     match term with
@@ -55,9 +47,6 @@ let set_all (term: Types.term) =
         sub term'
     | TmAttrib(lst, term') ->
       let () = set_attrib lst in
-        sub term'
-    | TmModule(v, term') ->
-      let () = set_module v in
         sub term'
     | TmComment(comment, term') -> sub term'
     | TmNull -> ()

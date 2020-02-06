@@ -25,7 +25,6 @@ type term =
   | TmImportPackage of (Range.t * string) list * term
   | TmComment of (Range.t * string) list * term
   | TmAttrib of attribs list * term
-  | TmModule of ((Range.t * string) * (Range.t * string)) * term
   | TmNull
   | TmEOF
   | TmWrong of string
