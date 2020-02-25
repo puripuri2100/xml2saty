@@ -9,6 +9,7 @@ open Range
 open Types
 open Parse
 open Lex
+open ReadJson
 open Error
 open OptionState
 open SatysfiSyntax
@@ -20,6 +21,11 @@ let option_from x opt =
   match opt with
   | Some(a) -> a
   | None -> x
+
+let option_from_opt x opt =
+  match opt with
+  | Some(a) -> Some(a)
+  | None -> Some(x)
 
 
 let add_paren str = "(" ^ str ^ ")"
@@ -109,8 +115,13 @@ let xml2string config xml =
     | PCData(str) -> str
 
 
-let main_of_xml (output_file_name: string) (config_file_name: string) (input_xml: Xml.xml) =
-  let config = open_in config_file_name |> Lexing.from_channel |> Parse.parse Lex.lex in
+let main_of_xml (output_file_name: string) (config_file_name: string option) (config_file_name_json: string option) (input_xml: Xml.xml) =
+  let config =
+    match (config_file_name, config_file_name_json) with
+    | (Some(f),_) -> open_in f |> Lexing.from_channel |> Parse.parse Lex.lex
+    | (_,Some(j)) -> read_json_file j
+    | (_,_) -> open_in "" |> Lexing.from_channel |> Parse.parse Lex.lex
+  in
   let is_package = OptionState.is_package () in
   let body_str = xml2string config input_xml in
   let body =
@@ -172,6 +183,16 @@ let arg_config curdir s =
   OptionState.set_config_file path
 
 
+let arg_config_json curdir j =
+  let path =
+    if Filename.is_relative j then
+      Filename.concat curdir j
+    else
+      j
+  in
+  OptionState.set_config_file_json path
+
+
 let arg_package str =
   let slst = String.split_on_char ',' str in
   let v =
@@ -194,6 +215,8 @@ let arg_spec curdir =
     ("--output", Arg.String (arg_output curdir), "Specify output file");
     ("-c",      Arg.String (arg_config curdir), "Specify config file");
     ("--config",Arg.String (arg_config curdir), "Specify config file");
+    ("-j",      Arg.String (arg_config_json curdir), "Specify config file(json)");
+    ("--json",  Arg.String (arg_config_json curdir), "Specify config file(json)");
     ("-p",       Arg.String (arg_package), "Output as package file");
     ("--package",Arg.String (arg_package), "Output as package file");
   ]
@@ -216,12 +239,14 @@ let main =
               file ^ ".x2s-config"
           in
           let output_file_name = OptionState.output_file () |> option_from make_output_file in
-          let config_file_name = OptionState.config_file () |> option_from make_config_file in
+          let config_file_name = OptionState.config_file () in
+          let config_file_json_name = OptionState.config_file_json () in
           let input_xml = OptionState.input_file () |> option_from "" |> Xml.parse_file in
-          main_of_xml output_file_name config_file_name input_xml
+          main_of_xml output_file_name config_file_name config_file_json_name input_xml
         else
           let output_file_name = OptionState.output_file () |> option_from "" in
-          let config_file_name = OptionState.config_file () |> option_from "" in
+          let config_file_name = OptionState.config_file () in
+          let config_file_json_name = OptionState.config_file_json () in
           let input_xml = OptionState.input_text () |> option_from "" |> Xml.parse_string in
-          main_of_xml output_file_name config_file_name input_xml
+          main_of_xml output_file_name config_file_name config_file_json_name input_xml
   )

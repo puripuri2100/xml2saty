@@ -15,6 +15,7 @@ depends: [
   "ocaml" {>= "4.06.0"}
   "xml-light"
   "menhir"
+  "yojson"
 ]
 build: [
   [make "-f" "Makefile" "build" "PREFIX=%{prefix}%"]

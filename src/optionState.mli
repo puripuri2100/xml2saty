@@ -13,6 +13,9 @@ val output_file : unit -> string option
 val set_config_file : string -> unit
 val config_file : unit -> string option
 
+val set_config_file_json : string -> unit
+val config_file_json : unit -> string option
+
 val set_package : (string * string) -> unit
 val is_package : unit -> bool
 val module_name : unit -> string

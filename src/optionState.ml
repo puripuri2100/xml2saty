@@ -4,6 +4,7 @@ type state = {
   mutable input_text : string option;
   mutable output_file : string option;
   mutable config_file : string option;
+  mutable config_file_json : string option;
   mutable is_package : bool;
   mutable module_name : string;
   mutable fun_name : string;
@@ -15,6 +16,7 @@ let state = {
   input_text = None;
   output_file = None;
   config_file = None;
+  config_file_json = None;
   is_package = false;
   module_name = "";
   fun_name = "";
@@ -37,6 +39,10 @@ let output_file () = state.output_file
 
 let set_config_file path = state.config_file <- Some(path)
 let config_file () = state.config_file
+
+
+let set_config_file_json path = state.config_file_json <- Some(path)
+let config_file_json () = state.config_file_json
 
 
 let set_package (m_name, f_name) =
