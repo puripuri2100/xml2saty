@@ -9,7 +9,7 @@ open Range
 open Types
 open Parse
 open Lex
-open ReadJson
+open JsonConfig
 open Error
 open OptionState
 open SatysfiSyntax
@@ -119,7 +119,7 @@ let main_of_xml (output_file_name: string) (config_file_name: string option) (co
   let config =
     match (config_file_name, config_file_name_json) with
     | (Some(f),_) -> open_in f |> Lexing.from_channel |> Parse.parse Lex.lex
-    | (_,Some(j)) -> read_json_file j
+    | (_,Some(j)) -> JsonConfig.read_json_file j
     | (_,_) -> open_in "" |> Lexing.from_channel |> Parse.parse Lex.lex
   in
   let is_package = OptionState.is_package () in
