@@ -24,15 +24,18 @@ uninstall:
 	rm -rf $(BINDIR)/$(TARGET)
 
 test: src xml2saty
-	./xml2saty -o test.saty -c test.x2s-config -t "<a> <b>1A</b> <c>3A<b>2A<c>3B</c></b></c> </a>"
-	./xml2saty test2.xml -c test.x2s-config
-	./xml2saty t/test3.xml -o t/test3.saty -c test.x2s-config
+#	./xml2saty -o test.saty -c test.x2s-config -t "<a> <b>1A</b> <c>3A<b>2A<c>3B</c></b></c> </a>"
+#	./xml2saty test2.xml -c test.x2s-config
+#	./xml2saty t/test3.xml -o t/test3.saty -c test.x2s-config
+	./xml2saty t/t.xml -o t/t.saty -j t/tconfig.json
 
 example: src example/law.x2s-config
 	./xml2saty -f example/gengou.xml -o example/gengou.saty -c example/law.x2s-config
 	./xml2saty -f example/keihou.xml -o example/keihou.saty -c example/law.x2s-config
 	./xml2saty -f example/gengou.xml -o example/gengou.saty -j example/law.json
 	./xml2saty -f example/keihou.xml -o example/keihou.saty -j example/law.json
+	satysfi example/gengou.saty -o example/gengou.pdf
+	satysfi example/keihou.saty -o example/keihou.pdf
 
 
 clean:

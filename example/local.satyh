@@ -1,7 +1,30 @@
 @require: stdja
 
-let-inline \Ruby it = it
-let-inline ctx \Rt _ = inline-nil
+let-mutable ruby-text <- {}
+
+let-inline ctx \Rt it =
+  let () = ruby-text <- it in
+  inline-nil
+
+let-inline ctx \Ruby it =
+  let main-ib = read-inline ctx it in%先に本文を評価しないと、ルビのテキストが更新されない
+  let ruby-ib =
+    let r-ctx =
+      ctx
+      |> set-font-size (get-font-size ctx *' 0.7)
+    in
+      read-inline r-ctx !ruby-text
+  in
+  let (main-ib-len,_,_) = get-natural-metrics main-ib in
+  let (ruby-ib-len,_,_) = get-natural-metrics ruby-ib in
+  let main =
+    if main-ib-len >' ruby-ib-len then
+      main-ib
+    else
+      let space = (ruby-ib-len -' main-ib-len) *' 0.5 in
+      inline-skip space ++ main-ib ++ inline-skip space
+  in
+    line-stack-bottom[ruby-ib;main]
 
 
 let law _ _ _ _ _ body = StdJa.document (|title = {法律}; author = {}; show-title = true; show-toc = false|) body
