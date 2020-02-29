@@ -151,7 +151,7 @@ let main_of_xml (output_file_name: string) (config_file_name: string option) (co
 
 
 let arg_version () =
-  print_string "xml2saty version 2.0.0\n"
+  print_string "xml2saty version 3.0.0\n"
 
 
 let arg_input_file curdir s =
