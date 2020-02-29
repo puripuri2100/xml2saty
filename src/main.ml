@@ -71,6 +71,7 @@ let xml2string config xml =
   let rec sub n btag xml =
     match xml with
     | Element(tag, attrib_lst, children) ->
+      let () = Printf.printf "start %s\n" tag in
       let tag_name = ConfigApply.to_cmd btag tag in
       let attrib = make_attrib tag attrib_lst in
       let children_str =
@@ -79,10 +80,14 @@ let xml2string config xml =
         else
           fold_lefti join_str "" (List.map (sub (n+1) tag) children)
       in
+      let main_str =
         tag_name
         ^ attrib
         ^ ConfigApply.type_paren tag children_str
         ^ ConfigApply.type_semicolon btag
+      in
+      let () = Printf.printf "end %s\n" tag in
+        main_str
     | PCData(str) -> ConfigApply.pcdata btag str
   in
   match xml with
@@ -213,10 +218,10 @@ let arg_spec curdir =
     ("--text", Arg.String arg_input_text, "Give XML text");
     ("-o",       Arg.String (arg_output curdir),  "Specify output file");
     ("--output", Arg.String (arg_output curdir), "Specify output file");
-    ("-c",      Arg.String (arg_config curdir), "Specify config file");
-    ("--config",Arg.String (arg_config curdir), "Specify config file");
-    ("-j",      Arg.String (arg_config_json curdir), "Specify config file(json)");
-    ("--json",  Arg.String (arg_config_json curdir), "Specify config file(json)");
+    ("-c",      Arg.String (arg_config_json curdir), "Specify config file");
+    ("--config",Arg.String (arg_config_json curdir), "Specify config file");
+    ("-x",      Arg.String (arg_config curdir), "Specify config file(json)");
+    ("--x2s-config",  Arg.String (arg_config curdir), "Specify config file(json)");
     ("-p",       Arg.String (arg_package), "Output as package file");
     ("--package",Arg.String (arg_package), "Output as package file");
   ]
@@ -233,10 +238,6 @@ let main =
           let make_output_file =
             let file = Filename.chop_extension (OptionState.input_file () |> option_from "") in
               file ^ ".saty"
-          in
-          let make_config_file =
-            let file = Filename.chop_extension (OptionState.input_file () |> option_from "") in
-              file ^ ".x2s-config"
           in
           let output_file_name = OptionState.output_file () |> option_from make_output_file in
           let config_file_name = OptionState.config_file () in

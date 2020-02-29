@@ -117,15 +117,10 @@ let get_json_attrib_list json =
   in
   let get_t t =
     let a_tag = get_tag t in
-    let () = Printf.printf "a_tag O.K.\n" in
     let a_rename = get_rename t in
-    let () = Printf.printf "a_rename O.K.\n" in
     let a_type = get_type t in
-    let () = Printf.printf "a_type O.K.\n" in
     let a_len = get_len t in
-    let () = Printf.printf "a_len O.K.\n" in
     let a_attribs = get_attribs t in
-    let () = Printf.printf "a_attribs O.K.\n" in
     (a_tag, a_rename, a_type, a_len, a_attribs)
   in
   json
