@@ -7,14 +7,8 @@ BUILD=_build
 .PHONY: build install uninstall clean example exampletest
 
 build: src
-	-mkdir ${BUILD}
-	cp src/lex.mll ${BUILD}
-	cp src/parse.mly ${BUILD}
-	cp src/*.ml src/*.mli ${BUILD}
-	cd ${BUILD} && ocamllex lex.mll
-	cd ${BUILD} && menhir parse.mly
-	cd ${BUILD} && ocamlfind ocamlopt -o xml2saty -linkpkg -package "xml-light,str,yojson" range.ml error.mli error.ml types.ml parse.mli parse.ml lex.ml readJson.mli readJson.ml jsonConfig.ml optionState.mli optionState.ml satysfiSyntax.mli satysfiSyntax.ml configState.mli configState.ml configApply.mli configApply.ml main.ml
-	cp ${BUILD}/${TARGET} ./
+	dune build src/main.exe
+	cp ${BUILD}/default/src/main.exe ./${TARGET}
 
 install: ${TARGET}
 	mkdir -p $(BINDIR)

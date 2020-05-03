@@ -1,0 +1,14 @@
+(executable
+  (name main)
+  (public_name xml2saty)
+  (flags (-w -3 -bin-annot -thread -safe-string))
+  (libraries  yojson
+              xml-light
+  )
+)
+
+(ocamllex
+ (modules lex))
+
+(menhir
+ (modules parse))

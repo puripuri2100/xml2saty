@@ -1,6 +1,7 @@
 _build
 t
 xml2saty
+.merlin
 
 *.saty
 *.pdf
